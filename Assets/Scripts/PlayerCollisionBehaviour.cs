@@ -25,6 +25,8 @@ public class PlayerCollisionBehaviour : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space)){
             if(isWithinACollectable && !isCarryingItem){
                 PickUpItem(pickableItem);
+            }else if(isWithinACollectable && isCarryingItem){
+                SwapItem();
             }else if(isCarryingItem){
                 DropItem();
             }
@@ -43,12 +45,19 @@ public class PlayerCollisionBehaviour : MonoBehaviour
     void PickUpItem(GameObject obj) {
         activeItem = obj.transform.parent.gameObject;
         activeItem.transform.parent = player.transform;
+        obj.GetComponent<BoxCollider2D>().enabled = false;
         // PlaceItemCorrectly(activeItem);
         isCarryingItem = true;
+    }
+    
+    void SwapItem(){
+        DropItem();
+        PickUpItem(pickableItem);
     }
 
     void DropItem(){
         activeItem.transform.parent = allCollectables.transform;
+        activeItem.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
         isCarryingItem = false;
     }
 
