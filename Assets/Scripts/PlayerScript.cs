@@ -35,6 +35,8 @@ public class PlayerScript : MonoBehaviour {
     public float insideDrag = 0.1f;
 
     public AudioClip damageSound;
+    public AudioClip deathSound;
+    public AudioClip pickup;
 
     public float health = 1.0f;
     public Slider healthBar;
@@ -242,6 +244,7 @@ public class PlayerScript : MonoBehaviour {
     }
 
     void PickUpItem(GameObject obj) {
+        AudioSource.PlayClipAtPoint(pickup, transform.position);
         activeItem = obj.gameObject;
         activeItem.transform.parent = player.transform;
         obj.GetComponent<BoxCollider2D>().enabled = false;
@@ -250,6 +253,7 @@ public class PlayerScript : MonoBehaviour {
     }
     
     void SwapItem(){
+        AudioSource.PlayClipAtPoint(pickup, transform.position);
         DropItem();
         PickUpItem(pickableItem);
     }
@@ -303,9 +307,11 @@ public class PlayerScript : MonoBehaviour {
         health -= 0.34f;
         healthBar.value = health;
         if (health <= 0) {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
             manager.GameOver();
+        } else {
+            AudioSource.PlayClipAtPoint(damageSound, transform.position);
         }
-        AudioSource.PlayClipAtPoint(damageSound, transform.position);
     }
 
     private void createNewAnchor(RaycastHit hit, TetherAnchor prevPoint, float prevangle)
