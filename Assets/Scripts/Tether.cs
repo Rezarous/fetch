@@ -7,6 +7,8 @@ public class Tether : MonoBehaviour
     public bool tethered = false;
 
     void Start() {
+        SliderJoint2D joint = gameObject.AddComponent<SliderJoint2D>();
+        joint.enabled = false;
     }
 
     void Update() {
@@ -14,14 +16,17 @@ public class Tether : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col) {
         tethered = true;
-        SliderJoint2D joint = gameObject.AddComponent<SliderJoint2D>();
+        SliderJoint2D joint = gameObject.GetComponent<SliderJoint2D>();
         joint.autoConfigureAngle = false;
         joint.angle = col.transform.eulerAngles.z;
         joint.connectedAnchor = col.transform.position;
+        joint.enabled = true;
     }
 
     public void DetachTether() {
-        tethered = false;
-        Destroy(gameObject.GetComponent<SliderJoint2D>());
+        if (tethered) {
+            tethered = false;
+            gameObject.GetComponent<SliderJoint2D>().enabled = false;
+        }
     }
 }

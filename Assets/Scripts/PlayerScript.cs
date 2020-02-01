@@ -11,6 +11,8 @@ public class PlayerScript : MonoBehaviour
     public float attachedThrust = 800.0f;
     public float detachedThrust = 5.0f;
 
+    public bool inside = true;
+
     void Start() {
     }
 
@@ -45,13 +47,25 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (tetherDiff.magnitude > 5) {
-            tetherRb.AddForce(-tetherDiff.normalized * springForce * (tetherDiff.magnitude - 5), ForceMode2D.Impulse);
-            myRb.AddForce(tetherDiff.normalized * springForce * (tetherDiff.magnitude - 5), ForceMode2D.Impulse);
+        if (tetherDiff.magnitude > 3) {
+            tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
+            myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
         }
 
         bool tethered = tether.GetComponent<Tether>().tethered;
-        float thrust = tethered ? attachedThrust : detachedThrust;
+        float thrust = tethered || inside ? attachedThrust : detachedThrust;
         myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0));
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "Inside") {
+            inside = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other) {
+        if (other.tag == "Inside") {
+            inside = false;
+        }
     }
 }
