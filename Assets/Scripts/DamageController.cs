@@ -8,11 +8,15 @@ public class DamageController : MonoBehaviour
     Color color;
     float r,g,b;
     float a;
+    Quaternion initialRot;
 
     void OnEnable() {
+        initialRot = transform.rotation;
         if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
             damage = 100;
         } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
+            damage = 0;
+        } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
             damage = 0;
         }
     }
@@ -25,12 +29,18 @@ public class DamageController : MonoBehaviour
                 FadeFireAway();
             } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
                 FixDetachable();
+            } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
+                FixDetachable();
             }
-        }else if( damage <= 0) {
+        }else if(damage <= 0) {
             if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
                 Destroy(gameObject);
             } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
                 GetComponent<DetachableObjectBehaviour>().MakeHealty();
+                transform.rotation = initialRot;
+            } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
+                GetComponent<DetachableObjectBehaviour>().MakeHealty();
+                transform.rotation = initialRot;
             }
         }
     }

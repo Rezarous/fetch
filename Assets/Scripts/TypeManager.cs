@@ -9,7 +9,9 @@ public class TypeManager : MonoBehaviour
         Fire,
         FireEx,
         Wrench,
-        Detachable
+        Detachable,
+        Tape,
+        Damageable
     }
 
     public Type type;

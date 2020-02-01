@@ -155,6 +155,10 @@ public class PlayerScript : MonoBehaviour
                 currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Detachable){
             return true;
         }
+        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Tape && 
+                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Damageable){
+            return true;
+        }
         return false;
     }
 
