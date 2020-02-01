@@ -8,10 +8,11 @@ public class PlayerScript : MonoBehaviour
     public bool isCarryingItem = false;
 
     public GameObject tether;
-    public float throwForce = 3.0f;
+    public float throwForce = 5.0f;
     public float springForce = 10.0f;
+    public float tetherLength = 4.0f;
 
-    public float attachedThrust = 800.0f;
+    public float attachedThrust = 200.0f;
     public float detachedThrust = 5.0f;
 
     public bool inside = true;
@@ -67,7 +68,7 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (tetherDiff.magnitude > 3) {
+        if (tetherDiff.magnitude > tetherLength) {
             tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
             myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
         }
