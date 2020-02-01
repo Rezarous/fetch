@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour
-{
+public class PlayerScript : MonoBehaviour {
+    public Manager manager;
     public GameObject allCollectables;
     public bool isCarryingItem = false;
 
@@ -76,7 +76,9 @@ public class PlayerScript : MonoBehaviour
 
         bool tethered = tether.GetComponent<Tether>().tethered;
         float thrust = tethered || inside ? attachedThrust : detachedThrust;
-        myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0));
+        if (manager.gameActive) {
+            myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0));
+        }
     }
 
     void ThrowTether() {
@@ -100,7 +102,7 @@ public class PlayerScript : MonoBehaviour
     }
 
     void OnTriggerStay2D(Collider2D obj) {
-        if(obj.tag == "Collectable"){
+        if(obj.tag == "Collectable") {
             isWithinACollectable = true;
             pickableItem = obj.transform.gameObject;
         }
