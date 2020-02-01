@@ -12,8 +12,8 @@ public class Rotate : MonoBehaviour {
         transform.Rotate(0, 0, rotationSpeed * Time.fixedDeltaTime);
     }
 
-    void AddRandomSpin() {
-        float spinAmount = Random.Range(1.0f, 6.0f);
+    public void AddRandomSpin() {
+        float spinAmount = Random.Range(2.0f, 6.0f);
         bool widdershins = Random.value > 0.5f;
         Debug.Log(widdershins);
 

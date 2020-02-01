@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeteorManager : MonoBehaviour
-{
-
+public class MeteorManager : MonoBehaviour {
     public GameObject meteorPrefab;
     private GameObject currentMeteor;
     float nextSalvoTime;
     int nextSalvoAmount;
+    public int salvosRemaining = 5;
+    public Rotate shipRotator;
 
     void Start() {
         nextSalvoTime = Time.time + Random.Range(5.0f, 10.0f);
@@ -16,7 +16,7 @@ public class MeteorManager : MonoBehaviour
     }
 
     void Update() {
-        if (Time.time > nextSalvoTime) {
+        if (Time.time > nextSalvoTime && salvosRemaining > 0) {
             SpawnSalvo();
         }
     }
@@ -27,6 +27,11 @@ public class MeteorManager : MonoBehaviour
         }
         nextSalvoAmount = Random.Range(nextSalvoAmount, nextSalvoAmount + 2);
         nextSalvoTime = Time.time + Random.Range(20.0f, 40.0f);
+        salvosRemaining -= 1;
+
+        if (salvosRemaining == 2) {
+            shipRotator.AddRandomSpin();
+        }
     }
 
     void SpawnMeteor(){
