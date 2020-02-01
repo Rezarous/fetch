@@ -28,22 +28,22 @@ public class CameraShake : MonoBehaviour
 	
 	void OnEnable()
 	{
-		originalPos = camTransform.localPosition;
+		//originalPos = camTransform.localPosition;
 	}
 
 	void Update()
 	{
 		if (shakeDuration > 0)
 		{
-            isShaking = true;
-			camTransform.position = originalPos + Random.insideUnitSphere * shakeAmount;
+      isShaking = true;
+			camTransform.position = transform.position + Random.insideUnitSphere * shakeAmount;
 			shakeDuration -= Time.deltaTime * decreaseFactor;
 		}
 		else
 		{
             isShaking = false;
 			shakeDuration = 0f;
-			camTransform.localPosition = originalPos;
+			//camTransform.localPosition = originalPos;
 		}
 	}
 }

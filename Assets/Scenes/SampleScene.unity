@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db37d30f1f3084d94b15ff614ce2e38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDamaged: 1
+  isDamaged: 0
   healthySprite: {fileID: 21300000, guid: e7b8cb3d7818649bd8a1e75ff670a97a, type: 3}
   damagedSprite: {fileID: 21300000, guid: 0b562bc4e53b94b8aad6fceb99bd8aed, type: 3}
 --- !u!114 &383953125
@@ -536,6 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce123ba14cd034dbbbb7f68f86d48f8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 100
 --- !u!4 &474444029 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6166070138014300094, guid: d3ff7480030994ee0abe74e3a4f34617,

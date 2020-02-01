@@ -4,21 +4,17 @@ using UnityEngine;
 
 public class DamageController : MonoBehaviour
 {
-    int damage = 100;
+    public int damage;
     Color color;
     float r,g,b;
     float a;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        // health = 100;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+    void OnEnable() {
+        if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
+            damage = 100;
+        } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
+            damage = 0;
+        }
     }
     
     // Called from the player

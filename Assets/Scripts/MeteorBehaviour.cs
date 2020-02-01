@@ -28,6 +28,8 @@ public class MeteorBehaviour : MonoBehaviour
             ShakeCamera();
             Destroy(gameObject);
         } else if (col.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
+            print("hit antenna");
+            col.GetComponent<DamageController>().damage = 100;
             col.GetComponent<DetachableObjectBehaviour>().MakeDamaged();
             ShakeCamera();
             Destroy(gameObject);
