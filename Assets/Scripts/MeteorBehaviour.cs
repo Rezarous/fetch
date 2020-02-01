@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class MeteorBehaviour : MonoBehaviour
 {
 
@@ -12,6 +13,10 @@ public class MeteorBehaviour : MonoBehaviour
 
     void OnEnable(){
         initialPose = transform.position;
+
+    public AudioClip shipHitSound;
+
+    void Start() {
     }
 
     // Update is called once per frame
@@ -25,6 +30,12 @@ public class MeteorBehaviour : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col) {
         if(col.tag == "Wall") {
             Instantiate(firePrefab, gameObject.transform.position, Quaternion.identity);
+            ShakeCamera();
+            GameObject.FindGameObjectWithTag("Spaceship").GetComponent<Ship>().Damage();
+            AudioSource.PlayClipAtPoint(shipHitSound, transform.position);
+            Destroy(gameObject);
+        } else if (col.tag == "Player") {
+            col.GetComponent<PlayerScript>().Damage();
             ShakeCamera();
             Destroy(gameObject);
         } else if (col.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {

@@ -7,6 +7,7 @@ public class MeteorManager : MonoBehaviour
 
     public GameObject meteorPrefab;
     private GameObject currentMeteor;
+    float lastSpawn;
 
     // Start is called before the first frame update
     void Start()
@@ -20,17 +21,21 @@ public class MeteorManager : MonoBehaviour
         if(Input.GetMouseButtonDown(1)){
             SpawnMeteor();
         }   
+
+        if (Time.time > lastSpawn + 5.0) {
+            SpawnMeteor();
+        }
     }
 
     void SpawnMeteor(){
         float radius = Random.Range(12,20);
         float angle = Random.Range(0, Mathf.PI*2);
         currentMeteor = Instantiate(meteorPrefab, OnCircle(radius, angle), Quaternion.identity);
+        lastSpawn = Time.time;
     }
 
     Vector3 OnCircle(float r, float angle) {
         Vector3 pose = new Vector3(Mathf.Sin(angle)*r, Mathf.Cos(angle)*r, 0);
         return pose;
     }
-
 }

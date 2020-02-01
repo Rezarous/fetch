@@ -8,6 +8,7 @@ TagManager:
   - Damage
   - Collectable
   - Inside
+  - Spaceship
   layers:
   - Default
   - TransparentFX
