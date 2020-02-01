@@ -46,3 +46,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background1
+    uniqueID: 2176714213
+    locked: 0
+  - name: Background2
+    uniqueID: 2848402193
+    locked: 0
+  - name: Ship
+    uniqueID: 2269944859
+    locked: 0
+  - name: Player
+    uniqueID: 162049663
+    locked: 0
+  - name: Roof
+    uniqueID: 2998697353
+    locked: 0

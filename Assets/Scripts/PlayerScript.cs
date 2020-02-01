@@ -178,15 +178,11 @@ public class PlayerScript : MonoBehaviour {
         if (currentRail == null) {
             Vector3 tetherDiff = tether.transform.position - transform.position;
             if (tetherDiff.magnitude > maxTetherLength) {
-            tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
-            myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
-        }
-        }
-
-        Vector3 effectiveTether = toVec3(tether_points.Peek().anchorPoint - position);
-
-        if (tetherLength > maxTetherLength) {
-            //tetherRb.AddForce(-effectiveTether.normalized * springForce, ForceMode2D.Impulse);
+                tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
+                myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
+            }
+        } else if (tetherLength > maxTetherLength) {
+            Vector3 effectiveTether = toVec3(tether_points.Peek().anchorPoint - position);
             myRb.AddForce(effectiveTether.normalized * springForce, ForceMode2D.Impulse);
         }
 
