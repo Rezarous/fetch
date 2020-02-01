@@ -6,12 +6,15 @@ public class PlayerScript : MonoBehaviour
 {
     public GameObject tether;
     public float throwForce = 3.0f;
-    public float springForce = 3.0f;
+    public float springForce = 10.0f;
+
+    public float attachedThrust = 800.0f;
+    public float detachedThrust = 5.0f;
 
     void Start() {
     }
 
-    void Update() {
+    void FixedUpdate() {
         Rigidbody2D myRb = gameObject.GetComponent<Rigidbody2D>();
         Rigidbody2D tetherRb = tether.GetComponent<Rigidbody2D>();
 
@@ -43,10 +46,12 @@ public class PlayerScript : MonoBehaviour
         }
 
         if (tetherDiff.magnitude > 5) {
-            tetherRb.AddForce(-tetherDiff.normalized * throwForce, ForceMode2D.Impulse);
-            myRb.AddForce(tetherDiff.normalized * throwForce, ForceMode2D.Impulse);
+            tetherRb.AddForce(-tetherDiff.normalized * springForce * (tetherDiff.magnitude - 5), ForceMode2D.Impulse);
+            myRb.AddForce(tetherDiff.normalized * springForce * (tetherDiff.magnitude - 5), ForceMode2D.Impulse);
         }
 
-        myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * 20, Input.GetAxis("Vertical") * 20, 0));
+        bool tethered = tether.GetComponent<Tether>().tethered;
+        float thrust = tethered ? attachedThrust : detachedThrust;
+        myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0));
     }
 }
