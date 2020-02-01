@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class Tether : MonoBehaviour
 {
     public bool tethered = false;
@@ -10,6 +11,9 @@ public class Tether : MonoBehaviour
     Rigidbody2D myRb;
     Collider2D rail;
     SliderJoint2D joint;
+
+    public AudioClip connectSound;
+    public AudioClip disconnectSound;
 
     void Start() {
         joint = gameObject.AddComponent<SliderJoint2D>();
@@ -38,6 +42,8 @@ public class Tether : MonoBehaviour
         joint.useLimits = true;
 
         myRb.drag = tetheredDrag;
+
+        AudioSource.PlayClipAtPoint(connectSound, transform.position);
     }
 
     public void DetachTether() {
@@ -45,6 +51,8 @@ public class Tether : MonoBehaviour
             tethered = false;
             gameObject.GetComponent<SliderJoint2D>().enabled = false;
             rail = null;
+
+            AudioSource.PlayClipAtPoint(disconnectSound, transform.position);
         }
     }
 }
