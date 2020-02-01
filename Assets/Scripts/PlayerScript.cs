@@ -30,6 +30,9 @@ public class PlayerScript : MonoBehaviour {
 
     public float attachedThrust = 200.0f;
     public float detachedThrust = 5.0f;
+    public float maxSpeed = 200.0f;
+
+    public AnimationCurve accelerationCurve;
 
     public bool inside = true;
     public float insideDrag = 0.1f;
@@ -112,7 +115,7 @@ public class PlayerScript : MonoBehaviour {
             Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
             Vector3 prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
             
-            bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 8);
+            bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 11);
             Vector2 flippedPrevDir = new Vector2(-prevdir.y, prevdir.x);
             float angle = Mathf.Sign(Vector2.Dot(toVec2(dir).normalized, flippedPrevDir.normalized));
 
@@ -134,7 +137,7 @@ public class PlayerScript : MonoBehaviour {
         else
         {
             Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
-            bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 8);
+            bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 11);
             if (hitBox)
             {
                 createNewAnchor(playerTrace, tether_points.Peek(), 1);
@@ -163,7 +166,7 @@ public class PlayerScript : MonoBehaviour {
     void FixedUpdate() {
         Camera.main.transform.position = transform.position + new Vector3(0, 0, -10);
 
-        if (!tether.activeSelf) {
+        /*if (!tether.activeSelf) {
             tether.transform.position = transform.position;
             if (Input.GetMouseButtonDown(0)) {
                 ThrowTether();
@@ -173,9 +176,9 @@ public class PlayerScript : MonoBehaviour {
                 currentRail = null;
                 tether.SetActive(false);
             }
-        }
+        }*/
 
-        if (currentRail == null) {
+        /*if (currentRail == null) {
             Vector3 tetherDiff = tether.transform.position - transform.position;
             if (tetherDiff.magnitude > maxTetherLength) {
                 tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
@@ -184,25 +187,32 @@ public class PlayerScript : MonoBehaviour {
         } else if (tetherLength > maxTetherLength) {
             Vector3 effectiveTether = toVec3(tether_points.Peek().anchorPoint - position);
             myRb.AddForce(effectiveTether.normalized * springForce, ForceMode2D.Impulse);
-        }
+        }*/
 
         // bool tethered = tether.GetComponent<Tether>().tethered;
+        if(myRb.velocity.magnitude > maxSpeed)
+        {
+            myRb.velocity = myRb.velocity.normalized * maxSpeed;
+        }
+
+
         bool tethered = true;
         float thrust = tethered || inside ? attachedThrust : detachedThrust;
+        thrust *= accelerationCurve.Evaluate(Mathf.Clamp01(myRb.velocity.magnitude / maxSpeed));
         if (manager.gameActive) {
             myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0));
         }
     }
 
     void ThrowTether() {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        /*Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 mouseDiff = mousePos - transform.position;
         mouseDiff.z = 0;
 
         tether.SetActive(true);
         tetherRb.velocity = myRb.velocity;
         tetherRb.AddForce(mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
-        myRb.AddForce(-mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
+        myRb.AddForce(-mouseDiff.normalized * throwForce, ForceMode2D.Impulse);*/
     }
 
     public void SetRail(GameObject rail) {
@@ -312,13 +322,16 @@ public class PlayerScript : MonoBehaviour {
 
     private void createNewAnchor(RaycastHit hit, TetherAnchor prevPoint, float prevangle)
     {
-        Vector3 hitToCenterDist = hit.point - hit.transform.position;
-        Vector2 offset = new Vector2(Mathf.Sign(hitToCenterDist.x), Mathf.Sign(hitToCenterDist.y));
+        Vector3 hitLocalSpace = hit.transform.InverseTransformPoint(hit.point);
+        Vector2 offset = new Vector2(Mathf.Sign(hitLocalSpace.x), Mathf.Sign(hitLocalSpace.y));
+
         Vector2 newTetherPosition = new Vector2(
-            hit.transform.position.x + (offset.x * (hit.transform.localScale.x * 0.5f)) + offset.x * outsideBufferDist,
-            hit.transform.position.y + (offset.y * (hit.transform.localScale.z * 0.5f)) + offset.y * outsideBufferDist
+            (offset.x * (hit.transform.localScale.x * 0.5f)) + offset.x * outsideBufferDist,
+            (offset.y * (hit.transform.localScale.y * 0.5f)) + offset.y * outsideBufferDist
             );
-        tether_points.Push(new TetherAnchor(toVec3(newTetherPosition) , prevPoint, prevangle));
+
+        newTetherPosition = hit.transform.TransformPoint(newTetherPosition);
+        tether_points.Push(new TetherAnchor(toVec3(newTetherPosition), prevPoint, prevangle));
     }
     public Vector3 toVec3(Vector2 vin)
     {
