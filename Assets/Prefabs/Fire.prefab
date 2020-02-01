@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6166070138014300093}
   - component: {fileID: 6166070138014300092}
   - component: {fileID: 6166070138014299715}
+  - component: {fileID: 7865372657604454796}
   m_Layer: 0
   m_Name: Fire
   m_TagString: Damage
@@ -120,3 +121,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce123ba14cd034dbbbb7f68f86d48f8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7865372657604454796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6166070138014300095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b142838f69c3e4088a5dfd9c47e5a406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0

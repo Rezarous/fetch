@@ -147,10 +147,12 @@ public class PlayerScript : MonoBehaviour
         if(currentDamage == null){
             return false;
         }
-        else if (activeItem.name == "FireEx" && currentDamage.name == "Fire"){
+        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.FireEx && 
+                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Fire){
             return true;
         }
-        else if (activeItem.name == "Wrench" && currentDamage.name == "Bolt"){
+        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Wrench && 
+                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Detachable){
             return true;
         }
         return false;

@@ -22,11 +22,20 @@ public class MeteorBehaviour : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        print("Trigger from meteor!");
+        // print("Trigger from meteor!");
         if(col.tag == "Wall") {
             Instantiate(firePrefab, gameObject.transform.position, Quaternion.identity);
-            Camera.main.GetComponent<CameraShake>().shakeDuration = 0.7f;
+            ShakeCamera();
+            Destroy(gameObject);
+        } else if (col.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
+            col.GetComponent<DetachableObjectBehaviour>().isDamaged = true;
+            ShakeCamera();
             Destroy(gameObject);
         }
+    }
+
+
+    void ShakeCamera() {
+        Camera.main.GetComponent<CameraShake>().shakeDuration = 0.7f;
     }
 }

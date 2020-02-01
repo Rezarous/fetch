@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DamageController : MonoBehaviour
 {
-    int health;
+    int health = 100;
     Color color;
     float r,g,b;
     float a;
@@ -12,7 +12,7 @@ public class DamageController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        health = 100;
+        // health = 100;
     }
 
     // Update is called once per frame
