@@ -8,10 +8,11 @@ public class PlayerCollisionBehaviour : MonoBehaviour
 
     GameObject activeItem;
     GameObject player;
-    bool isCarryingItem = false;
+    public bool isCarryingItem = false;
     bool isWithinACollectable = false;
 
     GameObject pickableItem;
+    GameObject currentDamage;
 
     // Start is called before the first frame update
     void Start()
@@ -31,19 +32,35 @@ public class PlayerCollisionBehaviour : MonoBehaviour
                 DropItem();
             }
         }
+
+        if(Input.GetKey(KeyCode.F) && isCarryingItem) {
+            UseItem(activeItem);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D obj) {
+        if(obj.tag == "Damage") {
+            currentDamage = obj.gameObject;
+        }
     }
 
     void OnTriggerStay2D(Collider2D obj) {
         isWithinACollectable = true;
         pickableItem = obj.transform.gameObject;
+        if(obj.tag == "Damage") {
+            currentDamage = obj.gameObject;
+        }
     }
 
     void OnTriggerExit2D(Collider2D obj){
         isWithinACollectable = false;
+        if(obj.tag == "Damage") {
+            currentDamage = null;
+        }
     }
 
     void PickUpItem(GameObject obj) {
-        activeItem = obj.transform.parent.gameObject;
+        activeItem = obj.gameObject;
         activeItem.transform.parent = player.transform;
         obj.GetComponent<BoxCollider2D>().enabled = false;
         // PlaceItemCorrectly(activeItem);
@@ -57,8 +74,16 @@ public class PlayerCollisionBehaviour : MonoBehaviour
 
     void DropItem(){
         activeItem.transform.parent = allCollectables.transform;
-        activeItem.transform.GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
+        activeItem.GetComponent<BoxCollider2D>().enabled = true;
         isCarryingItem = false;
+    }
+
+    void UseItem(GameObject item){
+        if(currentDamage != null){
+            print(item.name + " is being used for " + currentDamage.name);
+            currentDamage.GetComponent<DamageController>().ReduceHealth();
+        }
+        //print("using item");
     }
 
     // void PlaceItemCorrectly(GameObject obj){
