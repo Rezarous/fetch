@@ -107,8 +107,12 @@ public class PlayerScript : MonoBehaviour
     }
 
     void OnTriggerExit2D(Collider2D other) {
+        isWithinACollectable = false;
         if (other.tag == "Inside") {
             inside = false;
+        }
+        if (other.tag == "Damage") {
+            currentDamage = null;
         }
     }
 
