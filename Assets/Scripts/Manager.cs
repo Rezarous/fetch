@@ -7,6 +7,7 @@ public class Manager : MonoBehaviour {
     public bool gameActive = true;
     public Slider healthBar;
     public GameObject gameOver;
+    public GameObject victory;
 
     float shipDamage = 0.0f;
 
@@ -19,6 +20,9 @@ public class Manager : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.K)) {
             RepairShip();
+        }
+        if (Input.GetKeyDown(KeyCode.L)) {
+            Victory();
         }
     }
 
@@ -36,5 +40,10 @@ public class Manager : MonoBehaviour {
             shipDamage -= 0.1f;
         }
         healthBar.value = shipDamage;
+    }
+
+    void Victory() {
+        victory.SetActive(true);
+        gameActive = false;
     }
 }
