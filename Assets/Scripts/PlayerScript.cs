@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))]
 public class PlayerScript : MonoBehaviour {
     public Manager manager;
     public GameObject allCollectables;
@@ -18,6 +20,11 @@ public class PlayerScript : MonoBehaviour {
     public bool inside = true;
     public float insideDrag = 0.1f;
 
+    public AudioClip damageSound;
+
+    public float health = 1.0f;
+    public Slider healthBar;
+
     GameObject activeItem;
     GameObject player;
     GameObject pickableItem;
@@ -25,6 +32,7 @@ public class PlayerScript : MonoBehaviour {
 
     Rigidbody2D myRb;
     Rigidbody2D tetherRb;
+
     
     bool isWithinACollectable = false;
     bool isItemAllowed = false;
@@ -33,6 +41,8 @@ public class PlayerScript : MonoBehaviour {
         player = gameObject;
         myRb = player.GetComponent<Rigidbody2D>();
         tetherRb = tether.GetComponent<Rigidbody2D>();
+
+        healthBar.value = health;
     }
 
     void Update() {
@@ -164,9 +174,16 @@ public class PlayerScript : MonoBehaviour {
         return false;
     }
 
-
-
     void PlaceItemCorrectly(GameObject obj){
         obj.transform.position = new Vector3(transform.position.x, transform.position.y, -0.1f);
+    }
+
+    public void Damage() {
+        health -= 0.34f;
+        healthBar.value = health;
+        if (health <= 0) {
+            manager.GameOver();
+        }
+        AudioSource.PlayClipAtPoint(damageSound, transform.position);
     }
 }
