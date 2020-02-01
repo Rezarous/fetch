@@ -8,8 +8,10 @@ public class MeteorBehaviour : MonoBehaviour
 
     public float speed;
     public GameObject firePrefab;
+    public Transform damagedContainer;
 
     Vector3 initialPose;
+
 
     void OnEnable(){
         initialPose = transform.position;
@@ -18,6 +20,7 @@ public class MeteorBehaviour : MonoBehaviour
     public AudioClip shipHitSound;
 
     void Start() {
+        damagedContainer = GameObject.Find("All Damages").transform;
     }
 
     // Update is called once per frame
@@ -30,7 +33,8 @@ public class MeteorBehaviour : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col) {
         if(col.tag == "Wall") {
-            Instantiate(firePrefab, gameObject.transform.position, Quaternion.identity);
+            GameObject newFire = Instantiate(firePrefab, gameObject.transform.position, Quaternion.identity);
+            newFire.transform.parent = damagedContainer;
             ShakeCamera();
             AudioSource.PlayClipAtPoint(shipHitSound, transform.position);
             Destroy(gameObject);

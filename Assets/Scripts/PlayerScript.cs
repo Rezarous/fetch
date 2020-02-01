@@ -154,7 +154,6 @@ public class PlayerScript : MonoBehaviour {
     void UseItem(GameObject item){
         isItemAllowed = ItemCheck();
         if(currentDamage != null && isItemAllowed){
-            print(item.name + " is being used for " + currentDamage.name);
             currentDamage.GetComponent<DamageController>().ReduceDamage();
         }
     }
