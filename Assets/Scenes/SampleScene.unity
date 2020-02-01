@@ -399,9 +399,10 @@ GameObject:
   - component: {fileID: 383953122}
   - component: {fileID: 383953121}
   - component: {fileID: 383953124}
+  - component: {fileID: 383953125}
   m_Layer: 0
   m_Name: Antenna
-  m_TagString: Untagged
+  m_TagString: Damage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -414,7 +415,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 383953119}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.3, y: -0.01, z: -0.5}
+  m_LocalPosition: {x: 4.66, y: 0.16, z: -0.5}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 1587700918}
@@ -520,9 +521,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db37d30f1f3084d94b15ff614ce2e38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDamaged: 0
+  isDamaged: 1
   healthySprite: {fileID: 21300000, guid: e7b8cb3d7818649bd8a1e75ff670a97a, type: 3}
   damagedSprite: {fileID: 21300000, guid: 0b562bc4e53b94b8aad6fceb99bd8aed, type: 3}
+--- !u!114 &383953125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383953119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce123ba14cd034dbbbb7f68f86d48f8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &474444029 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6166070138014300094, guid: d3ff7480030994ee0abe74e3a4f34617,
@@ -1233,7 +1246,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285968917}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1

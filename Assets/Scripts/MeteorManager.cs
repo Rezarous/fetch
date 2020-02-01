@@ -17,13 +17,20 @@ public class MeteorManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetMouseButtonDown(0)){
+            SpawnMeteor();
+        }   
     }
 
     void SpawnMeteor(){
-        float x = Random.Range(15,20);
-        float y = Random.Range(15,20);
-        currentMeteor = Instantiate(meteorPrefab, new Vector3(x, y, 0), Quaternion.identity);
+        float radius = Random.Range(12,20);
+        float angle = Random.Range(0, Mathf.PI*2);
+        currentMeteor = Instantiate(meteorPrefab, OnCircle(radius, angle), Quaternion.identity);
+    }
+
+    Vector3 OnCircle(float r, float angle) {
+        Vector3 pose = new Vector3(Mathf.Sin(angle)*r, Mathf.Cos(angle)*r, 0);
+        return pose;
     }
 
 }
