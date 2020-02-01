@@ -8,24 +8,28 @@ public class Tether : MonoBehaviour
     public float tetheredDrag = 0.1f;
 
     Rigidbody2D myRb;
+    Collider2D rail;
+    SliderJoint2D joint;
 
     void Start() {
-        SliderJoint2D joint = gameObject.AddComponent<SliderJoint2D>();
+        joint = gameObject.AddComponent<SliderJoint2D>();
         joint.enabled = false;
 
         myRb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     void Update() {
+        if (rail) {
+            joint.angle = rail.transform.eulerAngles.z;
+            joint.connectedAnchor = rail.transform.position;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        BoxCollider2D box = col.GetComponent<BoxCollider2D>();
+        rail = col;
+        BoxCollider2D box = rail.GetComponent<BoxCollider2D>();
         tethered = true;
-        SliderJoint2D joint = gameObject.GetComponent<SliderJoint2D>();
         joint.autoConfigureAngle = false;
-        joint.angle = col.transform.eulerAngles.z;
-        joint.connectedAnchor = col.transform.position;
         joint.enabled = true;
         JointTranslationLimits2D limits = joint.limits;
         limits.min = -box.size.x / 2.0f;
@@ -40,6 +44,7 @@ public class Tether : MonoBehaviour
         if (tethered) {
             tethered = false;
             gameObject.GetComponent<SliderJoint2D>().enabled = false;
+            rail = null;
         }
     }
 }
