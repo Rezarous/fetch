@@ -13,7 +13,7 @@ public class DamageController : MonoBehaviour
 
     void OnEnable() {
         ship = GameObject.FindGameObjectWithTag("Spaceship").GetComponent<Ship>();
-        initialRot = transform.rotation;
+        initialRot = transform.localRotation;
         if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
             ship.Damage();
             damage = 100;
@@ -41,10 +41,10 @@ public class DamageController : MonoBehaviour
                 Destroy(gameObject);
             } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
                 GetComponent<DetachableObjectBehaviour>().MakeHealty();
-                transform.rotation = initialRot;
+                transform.localRotation = initialRot;
             } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
                 GetComponent<DetachableObjectBehaviour>().MakeHealty();
-                transform.rotation = initialRot;
+                transform.localRotation = initialRot;
             }
         }
     }
