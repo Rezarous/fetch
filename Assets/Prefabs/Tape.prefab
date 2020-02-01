@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2995513426011524136}
   - component: {fileID: 2476971860407346419}
   - component: {fileID: -8817036002809362248}
+  - component: {fileID: 7460837831709178281}
   m_Layer: 0
   m_Name: Tape
   m_TagString: Collectable
@@ -121,3 +122,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
+--- !u!114 &7460837831709178281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2995513426011524138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ece184dfc9ea7493c88fe9bccda85ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFinished: 0
