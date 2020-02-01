@@ -145,7 +145,7 @@ public class PlayerScript : MonoBehaviour {
         isItemAllowed = ItemCheck();
         if(currentDamage != null && isItemAllowed){
             print(item.name + " is being used for " + currentDamage.name);
-            currentDamage.GetComponent<DamageController>().ReduceHealth();
+            currentDamage.GetComponent<DamageController>().ReduceDamage();
         }
     }
 
@@ -159,6 +159,10 @@ public class PlayerScript : MonoBehaviour {
         }
         else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Wrench && 
                 currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Detachable){
+            return true;
+        }
+        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Tape && 
+                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Damageable){
             return true;
         }
         return false;

@@ -23,4 +23,14 @@ public class DetachableObjectBehaviour : MonoBehaviour
             GetComponent<SpriteRenderer>().sprite = damagedSprite;
         }
     }
+
+    public void MakeHealty() {
+        GetComponent<SpriteRenderer>().sprite = healthySprite;
+        isDamaged = false;
+    }
+
+    public void MakeDamaged() {
+        GetComponent<SpriteRenderer>().sprite = damagedSprite;
+        isDamaged = true;
+    }
 }
