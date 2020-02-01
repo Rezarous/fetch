@@ -283,3 +283,5 @@ MonoBehaviour:
   speed: 1
   firePrefab: {fileID: 6166070138014300095, guid: d3ff7480030994ee0abe74e3a4f34617,
     type: 3}
+  damagedContainer: {fileID: 0}
+  shipHitSound: {fileID: 8300000, guid: 5ac8fad76188f4141891b35565d4bb7a, type: 3}
