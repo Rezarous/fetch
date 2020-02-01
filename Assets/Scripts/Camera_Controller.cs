@@ -18,7 +18,10 @@ public class Camera_Controller : MonoBehaviour {
 
     void LateUpdate()
     {
-        transform.position = new Vector3(player.position.x, player.position.y, -10);
+        if(!GetComponent<CameraShake>().isShaking) {
+            transform.position = new Vector3(player.position.x, player.position.y, -10);
+        }
+        
     }
 
 
