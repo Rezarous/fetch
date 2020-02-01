@@ -6,7 +6,12 @@ TagManager:
   tags:
   - Collectable
   - Damage
+<<<<<<< HEAD
   - Wall
+=======
+  - Railable
+  - Inside
+>>>>>>> 7908f7caef3e2c6230c450a47682a3ad26587c08
   layers:
   - Default
   - TransparentFX
@@ -16,9 +21,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Tether
+  - Rail
+  - Rail Stop
   - 
   - 
   - 

@@ -2,29 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCollisionBehaviour : MonoBehaviour
+public class PlayerScript : MonoBehaviour
 {
     public GameObject allCollectables;
     public bool isCarryingItem = false;
 
+    public GameObject tether;
+    public float throwForce = 3.0f;
+    public float springForce = 10.0f;
+
+    public float attachedThrust = 800.0f;
+    public float detachedThrust = 5.0f;
+
+    public bool inside = true;
 
     GameObject activeItem;
     GameObject player;
     GameObject pickableItem;
     GameObject currentDamage;
+
+    Rigidbody2D myRb;
+    Rigidbody2D tetherRb;
     
     bool isWithinACollectable = false;
     bool isItemAllowed = false;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
+
+    void Start() {
         player = gameObject;
+        myRb = player.GetComponent<Rigidbody2D>();
+        tetherRb = tether.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if(Input.GetKeyDown(KeyCode.Space)){
             if(isWithinACollectable && !isCarryingItem){
                 PickUpItem(pickableItem);
@@ -40,9 +49,50 @@ public class PlayerCollisionBehaviour : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D obj) {
-        if(obj.tag == "Damage") {
-            currentDamage = obj.gameObject;
+    void FixedUpdate() {
+        Vector3 tetherDiff = tether.transform.position - transform.position;
+
+        Camera.main.transform.position = transform.position + new Vector3(0, 0, -10);
+
+        if (!tether.activeSelf) {
+            tether.transform.position = transform.position;
+            if (Input.GetMouseButtonDown(0)) {
+                ThrowTether();
+            }
+        } else {
+            Debug.DrawLine(transform.position, tether.transform.position, Color.white);
+            if (Input.GetMouseButtonDown(0)) {
+                tether.GetComponent<Tether>().DetachTether();
+                tether.SetActive(false);
+            }
+        }
+
+        if (tetherDiff.magnitude > 3) {
+            tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
+            myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
+        }
+
+        bool tethered = tether.GetComponent<Tether>().tethered;
+        float thrust = tethered || inside ? attachedThrust : detachedThrust;
+        myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0));
+    }
+
+    void ThrowTether() {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseDiff = mousePos - transform.position;
+        mouseDiff.z = 0;
+
+        tether.SetActive(true);
+        tetherRb.velocity = myRb.velocity;
+        tetherRb.AddForce(mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
+        myRb.AddForce(-mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag == "Damage") {
+            currentDamage = other.gameObject;
+        } else if (other.tag == "Inside") {
+            inside = true;
         }
     }
 
@@ -56,10 +106,9 @@ public class PlayerCollisionBehaviour : MonoBehaviour
         }
     }
 
-    void OnTriggerExit2D(Collider2D obj){
-        isWithinACollectable = false;
-        if(obj.tag == "Damage") {
-            currentDamage = null;
+    void OnTriggerExit2D(Collider2D other) {
+        if (other.tag == "Inside") {
+            inside = false;
         }
     }
 
@@ -108,17 +157,4 @@ public class PlayerCollisionBehaviour : MonoBehaviour
     void PlaceItemCorrectly(GameObject obj){
         obj.transform.position = new Vector3(transform.position.x, transform.position.y, -0.1f);
     }
-
-
-    // void OnTriggerEnter2D(Collider2D col)
-    // {
-    //     Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
-    //     //spriteMove = -0.1f;
-    //     if(col.transform.parent.tag == "Collectable"){
-    //         //print("Hit a collectable");
-    //         activeItem = col.transform.parent.gameObject;
-    //         activeItem.transform.parent = player.transform;
-    //     }
-    // }
-    
 }
