@@ -17,7 +17,7 @@ public class Ship : MonoBehaviour {
             Damage();
         }
         if (Input.GetKeyDown(KeyCode.K)) {
-            RepairShip();
+            Repair();
         }
     }
 
@@ -29,7 +29,7 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    public void RepairShip() {
+    public void Repair() {
         if (shipHealth <= 0.9f) {
             shipHealth += 0.1f;
         }

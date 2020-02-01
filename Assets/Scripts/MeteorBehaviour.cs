@@ -13,6 +13,7 @@ public class MeteorBehaviour : MonoBehaviour
 
     void OnEnable(){
         initialPose = transform.position;
+    }
 
     public AudioClip shipHitSound;
 
@@ -31,7 +32,6 @@ public class MeteorBehaviour : MonoBehaviour
         if(col.tag == "Wall") {
             Instantiate(firePrefab, gameObject.transform.position, Quaternion.identity);
             ShakeCamera();
-            GameObject.FindGameObjectWithTag("Spaceship").GetComponent<Ship>().Damage();
             AudioSource.PlayClipAtPoint(shipHitSound, transform.position);
             Destroy(gameObject);
         } else if (col.tag == "Player") {
@@ -39,12 +39,12 @@ public class MeteorBehaviour : MonoBehaviour
             ShakeCamera();
             Destroy(gameObject);
         } else if (col.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
-            col.GetComponent<DamageController>().damage = 100;
+            col.GetComponent<DamageController>().MakeDamaged();
             col.GetComponent<DetachableObjectBehaviour>().MakeDamaged();
             ShakeCamera();
             Destroy(gameObject);
         } else if (col.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
-            col.GetComponent<DamageController>().damage = 100;
+            col.GetComponent<DamageController>().MakeDamaged();
             col.GetComponent<DetachableObjectBehaviour>().MakeDamaged();
             ShakeCamera();
             Destroy(gameObject);

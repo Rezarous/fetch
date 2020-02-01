@@ -9,10 +9,13 @@ public class DamageController : MonoBehaviour
     float r,g,b;
     float a;
     Quaternion initialRot;
+    Ship ship;
 
     void OnEnable() {
+        ship = GameObject.FindGameObjectWithTag("Spaceship").GetComponent<Ship>();
         initialRot = transform.rotation;
         if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
+            ship.Damage();
             damage = 100;
         } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
             damage = 0;
@@ -33,6 +36,7 @@ public class DamageController : MonoBehaviour
                 FixDetachable();
             }
         }else if(damage <= 0) {
+            ship.Repair();
             if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
                 Destroy(gameObject);
             } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
@@ -43,6 +47,11 @@ public class DamageController : MonoBehaviour
                 transform.rotation = initialRot;
             }
         }
+    }
+
+    public void MakeDamaged() {
+        damage = 100;
+        ship.Damage();
     }
 
     void FixDetachable() {
