@@ -5,15 +5,17 @@ using UnityEngine;
 public class PlayerCollisionBehaviour : MonoBehaviour
 {
     public GameObject allCollectables;
+    public bool isCarryingItem = false;
+
 
     GameObject activeItem;
     GameObject player;
-    public bool isCarryingItem = false;
-    bool isWithinACollectable = false;
-
     GameObject pickableItem;
     GameObject currentDamage;
-
+    
+    bool isWithinACollectable = false;
+    bool isItemAllowed = false;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +47,10 @@ public class PlayerCollisionBehaviour : MonoBehaviour
     }
 
     void OnTriggerStay2D(Collider2D obj) {
-        isWithinACollectable = true;
-        pickableItem = obj.transform.gameObject;
+        if(obj.tag == "Collectable"){
+            isWithinACollectable = true;
+            pickableItem = obj.transform.gameObject;
+        }
         if(obj.tag == "Damage") {
             currentDamage = obj.gameObject;
         }
@@ -63,7 +67,7 @@ public class PlayerCollisionBehaviour : MonoBehaviour
         activeItem = obj.gameObject;
         activeItem.transform.parent = player.transform;
         obj.GetComponent<BoxCollider2D>().enabled = false;
-        // PlaceItemCorrectly(activeItem);
+        PlaceItemCorrectly(activeItem);
         isCarryingItem = true;
     }
     
@@ -79,16 +83,31 @@ public class PlayerCollisionBehaviour : MonoBehaviour
     }
 
     void UseItem(GameObject item){
-        if(currentDamage != null){
+        isItemAllowed = ItemCheck();
+        if(currentDamage != null && isItemAllowed){
             print(item.name + " is being used for " + currentDamage.name);
             currentDamage.GetComponent<DamageController>().ReduceHealth();
         }
-        //print("using item");
     }
 
-    // void PlaceItemCorrectly(GameObject obj){
-    //     obj.transform.position = transform.position;
-    // }
+    bool ItemCheck(){
+        if(currentDamage == null){
+            return false;
+        }
+        else if (activeItem.name == "FireEx" && currentDamage.name == "Fire"){
+            return true;
+        }
+        else if (activeItem.name == "Wrench" && currentDamage.name == "Bolt"){
+            return true;
+        }
+        return false;
+    }
+
+
+
+    void PlaceItemCorrectly(GameObject obj){
+        obj.transform.position = new Vector3(transform.position.x, transform.position.y, -0.1f);
+    }
 
 
     // void OnTriggerEnter2D(Collider2D col)

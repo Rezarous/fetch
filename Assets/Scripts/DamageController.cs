@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class DamageController : MonoBehaviour
 {
-
-    public int health;
-
+    int health;
     Color color;
     float r,g,b;
     float a;
