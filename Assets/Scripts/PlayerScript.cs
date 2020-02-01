@@ -16,7 +16,7 @@ public class PlayerScript : MonoBehaviour
 
     public bool inside = true;
 
-    GameObject activeItem;
+    public GameObject activeItem;
     GameObject player;
     GameObject pickableItem;
     GameObject currentDamage;
@@ -140,6 +140,7 @@ public class PlayerScript : MonoBehaviour
         if(currentDamage != null && isItemAllowed){
             print(item.name + " is being used for " + currentDamage.name);
             currentDamage.GetComponent<DamageController>().ReduceDamage();
+            item.GetComponent<ToolBehaviour>().UseAndReduce();
         }
     }
 
@@ -160,6 +161,16 @@ public class PlayerScript : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void ThisItemDied(TypeManager.Type giveType) {
+        print("####");
+        if(activeItem.GetComponent<TypeManager>().type == giveType){
+            print("@@@@");
+            activeItem.GetComponent<ToolBehaviour>().DestroyTool();
+            isCarryingItem = false;
+            activeItem = null;
+        }
     }
 
 
