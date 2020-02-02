@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5311219630709840321
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6637190239294646136, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: healthySprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 26ab5ad7315ec595a9b62ceb7619b5b7,
+        type: 3}
+    - target: {fileID: 6637190239294646136, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: damagedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8731d739969667f12ba321140924b994,
+        type: 3}
+    - target: {fileID: 6637190239294646138, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646138, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 3.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646139, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 26ab5ad7315ec595a9b62ceb7619b5b7,
+        type: 3}
+    - target: {fileID: 6637190239294646139, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -2025022437
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646139, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646142, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_Name
+      value: SolarPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7082768
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7059349
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637190239294646143, guid: 05641a610d53a4ad08e6ed55263980b1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90.19
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 05641a610d53a4ad08e6ed55263980b1, type: 3}
