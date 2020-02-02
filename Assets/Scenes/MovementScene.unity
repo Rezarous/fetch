@@ -1011,6 +1011,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   tetherJoint: {fileID: 2005905655}
+  deadDoggo: {fileID: 21300000, guid: 48ea6dd3d9827eedd84c4d8dd4de0a28, type: 3}
+  happyDoggo: {fileID: 21300000, guid: ddfacfd64b8aafe35af684b9585beaa4, type: 3}
   inside: 1
   tethered: 1
   insideDrag: 0.1
