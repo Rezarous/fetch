@@ -161,6 +161,28 @@ public class PlayerScript : MonoBehaviour
             UseItem(activeItem);
         }
 
+        if (!tether.activeSelf) {
+            tether.transform.position = transform.position;
+            if (Input.GetMouseButtonDown(0)) {
+                if (currentRail == null) {
+                    ThrowTether();
+                }
+                else {
+                    currentRail = null;
+                    resetTether();
+                    //tether.GetComponent<Tether>().DetachTether();
+                    tethered = false;
+                }
+            }
+        }
+        else {
+            if (Input.GetMouseButtonDown(0)) {
+                currentRail = null;
+                tether.SetActive(false);
+            }
+        }
+
+
         ///////////////////////////////////////////////////////
 
         if (tethered) {
@@ -257,41 +279,18 @@ public class PlayerScript : MonoBehaviour
     }
 
     void FixedUpdate() {
-        Debug.Log(transform.position.magnitude);
         if (transform.position.magnitude > 20) {
             Die();
         }
         Camera.main.transform.position = transform.position + new Vector3(0, 0, -10);
         //bool tethered = tether.GetComponent<Tether>().tethered;
 
-        if (!tether.activeSelf) {
-            tether.transform.position = transform.position;
-            if (Input.GetMouseButtonDown(0)) {
-                if (currentRail == null) {
-                    ThrowTether();
-                }
-                else {
-                    currentRail = null;
-                    resetTether();
-                    //tether.GetComponent<Tether>().DetachTether();
-                    tethered = false;
-                }
-            }
-        }
-        else {
-            if (Input.GetMouseButtonDown(0)) {
-                currentRail = null;
+        if (currentRail == null) {
+            Vector3 tetherDiff = tether.transform.position - transform.position;
+            if (tetherDiff.magnitude > maxTetherLength) {
                 tether.SetActive(false);
             }
         }
-
-        /*if (currentRail == null) {
-            Vector3 tetherDiff = tether.transform.position - transform.position;
-            if (tetherDiff.magnitude > maxTetherLength) {
-                tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
-                myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
-            }
-        }*/
 
         if (tethered) {
             tetherJoint.connectedAnchor = tether_points.Peek().anchorPoint;
@@ -331,7 +330,6 @@ public class PlayerScript : MonoBehaviour
         tether.SetActive(true);
         tetherRb.velocity = myRb.velocity;
         tetherRb.AddForce(mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
-        myRb.AddForce(-mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
     }
 
     public void SetRail(GameObject rail) {
