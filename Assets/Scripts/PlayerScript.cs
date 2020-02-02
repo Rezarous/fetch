@@ -105,6 +105,10 @@ public class PlayerScript : MonoBehaviour
 
     public Vector3[] lineRendererPoints;
 
+    private bool autoAttachedOnExit;
+    private float lastExitTime;
+    private float autoConnectTimeout;
+
     void Start() {
         player = gameObject;
         myRb = player.GetComponent<Rigidbody2D>();
@@ -116,9 +120,28 @@ public class PlayerScript : MonoBehaviour
         TetherAnchor attachPoint = new TetherAnchor(new Vector2(0, 0), null, 0);
         tether_points = new Stack<TetherAnchor>();
         tether_points.Push(attachPoint);
+        autoConnectTimeout = 0.1f;
     }
 
     void Update() {
+
+        if (inside)
+        {
+            autoAttachedOnExit = false;
+            lastExitTime = Time.time;
+        } else
+        {
+            if (!autoAttachedOnExit)
+            {
+                if(Time.time - lastExitTime > autoConnectTimeout)
+                {
+                    autoAttachedOnExit = true;
+                    attachToClosestRail();
+                }
+            }
+        }
+        
+
         position.x = transform.position.x;
         position.y = transform.position.y;
 
@@ -345,12 +368,31 @@ public class PlayerScript : MonoBehaviour
     void OnTriggerExit2D(Collider2D other) {
         isWithinACollectable = false;
         if (other.tag == "Inside") {
-            Inside = false;
+            Inside = false;   
             myRb.drag = 0;
         }
         if (other.tag == "Damage") {
             currentDamage = null;
         }
+    }
+
+    private void attachToClosestRail()
+    {
+        Rail[] allrails = GameObject.Find("Rails").transform.GetComponentsInChildren<Rail>();
+        Rail closest = allrails[0];
+        float dist = Mathf.Infinity;
+        foreach(Rail r in allrails)
+        {
+            float tempdist = Vector3.Distance(r.transform.position, transform.position);
+            if (tempdist < dist)
+            {
+                dist = tempdist;
+                closest = r;
+            }
+        }
+        tethered = true;
+        SetRail(closest.transform.gameObject);
+        resetTether();
     }
 
     void PickUpItem(GameObject obj) {
