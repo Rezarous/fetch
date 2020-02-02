@@ -33,6 +33,7 @@ public class PlayerScript : MonoBehaviour {
     public float maxSpeed = 200.0f;
 
     public AnimationCurve accelerationCurve;
+    public DistanceJoint2D tetherJoint;
 
     public bool inside = true;
     public float insideDrag = 0.1f;
@@ -190,17 +191,29 @@ public class PlayerScript : MonoBehaviour {
         }*/
 
         // bool tethered = tether.GetComponent<Tether>().tethered;
+
+        tetherJoint.connectedAnchor = tether_points.Peek().anchorPoint;
+        float lastSegmentLength = Vector2.Distance(tether_points.Peek().anchorPoint, position);
+        float jointlength = maxTetherLength - (tetherLength - lastSegmentLength);
+        tetherJoint.distance = jointlength;
+
         if(myRb.velocity.magnitude > maxSpeed)
         {
             myRb.velocity = myRb.velocity.normalized * maxSpeed;
         }
 
-
         bool tethered = true;
         float thrust = tethered || inside ? attachedThrust : detachedThrust;
-        thrust *= accelerationCurve.Evaluate(Mathf.Clamp01(myRb.velocity.magnitude / maxSpeed));
+        Vector3 accelerationVector = new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0);   
+        Vector3 accelComponentInDir = myRb.velocity * (Vector3.Dot(accelerationVector, myRb.velocity) / Mathf.Pow(myRb.velocity.magnitude, 2));
+        if (myRb.velocity.magnitude > 0)
+        {
+            accelComponentInDir *= 1 - accelerationCurve.Evaluate(Mathf.Clamp01(myRb.velocity.magnitude / maxSpeed));
+            float dotprod = Mathf.Clamp01(Vector3.Dot(accelerationVector, myRb.velocity));
+            accelerationVector = Vector3.Lerp(accelerationVector, accelerationVector - accelComponentInDir, dotprod);
+        }
         if (manager.gameActive) {
-            myRb.AddForce(new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0));
+            myRb.AddForce(toVec2(accelerationVector));
         }
     }
 
