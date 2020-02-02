@@ -126,7 +126,9 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetMouseButton(1)) {
             if(Input.GetMouseButtonDown(1)){
                 if (isCarryingItem){
-                    if(isWithinACollectable) {
+                    if (isWithinDamage) {
+                        UseItem(activeItem);
+                    } else if(isWithinACollectable) {
                         SwapItem();
                     } else {
                         DropItem();
