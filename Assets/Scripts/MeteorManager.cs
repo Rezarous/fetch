@@ -9,14 +9,16 @@ public class MeteorManager : MonoBehaviour {
     int nextSalvoAmount;
     public int salvosRemaining = 5;
     public Rotate shipRotator;
+    bool active = false;
 
-    void Start() {
+    public void Begin() {
+        active = true;
         nextSalvoTime = Time.time + Random.Range(5.0f, 10.0f);
         nextSalvoAmount = 1;
     }
 
     void Update() {
-        if (Time.time > nextSalvoTime && salvosRemaining > 0) {
+        if (active && Time.time > nextSalvoTime && salvosRemaining > 0) {
             SpawnSalvo();
         }
     }

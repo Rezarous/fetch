@@ -6,6 +6,8 @@ public class Manager : MonoBehaviour {
     public bool gameActive = true;
     public GameObject gameOver;
     public GameObject victory;
+    public GameObject startScreen;
+    public GameObject introScreen;
     MeteorManager meteorManager;
     float victoryTime;
     bool finalSalvoFired = false;
@@ -25,6 +27,8 @@ public class Manager : MonoBehaviour {
     GameObject currentFireEx;
     GameObject currentActiveItem;
 
+    float startTime;
+
     void Start() {
         meteorManager = gameObject.GetComponent<MeteorManager>();
 
@@ -33,7 +37,17 @@ public class Manager : MonoBehaviour {
         currentFireEx = InstantiateTool(fireExPrefab, fireExBase);
     }
 
+    public void PressStart() {
+        meteorManager.Begin();
+        startScreen.SetActive(false);
+        introScreen.SetActive(true);
+        startTime = Time.time;
+    }
+
     void Update() {
+        if (Time.time > startTime + 10) {
+            introScreen.SetActive(false);
+        }
         if(currentWrench.GetComponent<ToolBehaviour>().isFinished) {
             player.ThisItemDied(currentWrench.GetComponent<TypeManager>().type);
             currentWrench = InstantiateTool(wrenchPrefab, wrenchBase);
