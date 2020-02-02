@@ -122,7 +122,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  repairSound: {fileID: 0}
 --- !u!114 &-7064933429979129890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,3 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   isFinished: 0
+  fire2: {fileID: 21300000, guid: 0457e187ebe7f439d81071116c22f445, type: 3}
+  fire1: {fileID: 21300000, guid: afe036679ce204940bdb2ca406f5c053, type: 3}
+  tape2: {fileID: 21300000, guid: ea76ff3d870f2483eb0e46a155bac782, type: 3}
+  tape1: {fileID: 21300000, guid: c050b69687caf46d3b5d399110478126, type: 3}
