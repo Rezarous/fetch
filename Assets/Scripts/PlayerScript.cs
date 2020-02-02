@@ -18,48 +18,64 @@ public class TetherAnchor
 }
 
 [RequireComponent(typeof(AudioSource))]
-public class PlayerScript : MonoBehaviour {
-
+public class PlayerScript : MonoBehaviour
+{
     public Manager manager;
     public GameObject allCollectables;
     public bool isCarryingItem = false;
-    public GameObject activeItem;
-    GameObject player;
-    Rigidbody2D myRb;
-    GameObject pickableItem;
-    GameObject currentDamage;
-
-    [Space(20)]
-
-    public float health = 1.0f;
-    public Slider healthBar;
-
-    [Space(20)]
 
     public GameObject tether;
-    Rigidbody2D tetherRb;
-    public DistanceJoint2D tetherJoint;
     public float throwForce = 5.0f;
     public float springForce = 10.0f;
     public float maxTetherLength = 2.0f;
-    public AnimationCurve accelerationCurve;
-    
-    [Space(20)]
 
     public float attachedThrust = 200.0f;
     public float detachedThrust = 5.0f;
     public float maxSpeed = 200.0f;
 
-    [Space(20)]
+    public AnimationCurve accelerationCurve;
+    public DistanceJoint2D tetherJoint;
 
     public bool inside = true;
+    public bool Inside {
+        get { return inside; }
+        set {
+            inside = value;
+            foreach (var audioSource in FindObjectsOfType<AudioSource>()) {
+                if ((inside == false && audioSource.outputAudioMixerGroup?.audioMixer?.name == "inside") ||
+                    (inside == true && audioSource.outputAudioMixerGroup?.audioMixer?.name == "outside")) {
+                    StartCoroutine(AudioHelper.FadeOut(audioSource, 1f));
+                }
+                else {
+                    StartCoroutine(AudioHelper.FadeIn(audioSource, 1f));
+                }
+            }
+        }
+    }
     public float insideDrag = 0.1f;
 
-    [Space(20)]
-
-    public AudioClip damageSound;
-    public AudioClip deathSound;
+    public AudioClip[] damageSounds;
+    public AudioClip[] damageSoundsDim;
+    public AudioClip[] deathSounds;
+    public AudioClip[] deathSoundsDim;
+    public AudioClip[] barkSounds;
+    public AudioClip[] barkSoundsDim;
+    public AudioClip[] pantingSounds;
+    public AudioClip[] pantingSoundsDim;
     public AudioClip pickup;
+    public AudioClip[] hitWall;
+    public AudioClip[] hitWallDim;
+
+    public float health = 1.0f;
+    public Slider healthBar;
+
+    public GameObject activeItem;
+    GameObject player;
+    GameObject pickableItem;
+    GameObject currentDamage;
+
+    Rigidbody2D myRb;
+    Rigidbody2D tetherRb;
     
     bool isWithinACollectable = false;
     bool isItemAllowed = false;
@@ -94,14 +110,16 @@ public class PlayerScript : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Space)){
             if(isWithinACollectable && !isCarryingItem){
                 PickUpItem(pickableItem);
-            }else if(isWithinACollectable && isCarryingItem){
+            }
+            else if (isWithinACollectable && isCarryingItem) {
                 SwapItem();
-            }else if(isCarryingItem){
+            }
+            else if (isCarryingItem) {
                 DropItem();
             }
         }
 
-        if(Input.GetKey(KeyCode.F) && isCarryingItem) {
+        if (Input.GetKey(KeyCode.F) && isCarryingItem) {
             UseItem(activeItem);
         }
 
@@ -241,20 +259,26 @@ public class PlayerScript : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Damage") {
+        if (other.tag == "Damage") {
             currentDamage = other.gameObject;
-        } else if (other.tag == "Inside") {
-            inside = true;
+        }
+        else if (other.tag == "Inside") {
+            Inside = true;
             myRb.drag = insideDrag;
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision) {
+        AudioHelper.PlayInside(hitWall[Random.Range(0, hitWall.Length)], 0.01f, 0.05f, 0.2f);
+        AudioHelper.PlayOutside(hitWallDim[Random.Range(0, hitWallDim.Length)], 0.01f, 0.05f, 0.2f);
+    }
+
     void OnTriggerStay2D(Collider2D obj) {
-        if(obj.tag == "Collectable") {
+        if (obj.tag == "Collectable") {
             isWithinACollectable = true;
             pickableItem = obj.transform.gameObject;
         }
-        if(obj.tag == "Damage") {
+        if (obj.tag == "Damage") {
             currentDamage = obj.gameObject;
         }
     }
@@ -262,7 +286,7 @@ public class PlayerScript : MonoBehaviour {
     void OnTriggerExit2D(Collider2D other) {
         isWithinACollectable = false;
         if (other.tag == "Inside") {
-            inside = false;
+            Inside = false;
             myRb.drag = 0;
         }
         if (other.tag == "Damage") {
@@ -278,66 +302,71 @@ public class PlayerScript : MonoBehaviour {
         PlaceItemCorrectly(activeItem);
         isCarryingItem = true;
     }
-    
-    void SwapItem(){
+
+    void SwapItem() {
         AudioSource.PlayClipAtPoint(pickup, transform.position);
         DropItem();
         PickUpItem(pickableItem);
     }
 
-    void DropItem(){
+    void DropItem() {
         activeItem.transform.parent = allCollectables.transform;
         activeItem.GetComponent<BoxCollider2D>().enabled = true;
         isCarryingItem = false;
     }
 
-    void UseItem(GameObject item){
+    void UseItem(GameObject item) {
         isItemAllowed = ItemCheck();
-        if(currentDamage != null && isItemAllowed){
+        if (currentDamage != null && isItemAllowed) {
             currentDamage.GetComponent<DamageController>().ReduceDamage();
             item.GetComponent<ToolBehaviour>().UseAndReduce();
+
+            AudioHelper.PlayInside(barkSounds[Random.Range(0, barkSounds.Length)], 0.05f);
+            AudioHelper.PlayOutside(barkSoundsDim[Random.Range(0, barkSoundsDim.Length)], 0.05f);
         }
     }
 
-    bool ItemCheck(){
-        if(currentDamage == null){
+    bool ItemCheck() {
+        if (currentDamage == null) {
             return false;
         }
-        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.FireEx && 
-                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Fire){
+        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.FireEx &&
+                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
             return true;
         }
-        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Wrench && 
-                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Detachable){
+        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Wrench &&
+                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
             return true;
         }
-        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Tape && 
-                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Damageable){
+        else if (activeItem.GetComponent<TypeManager>().type == TypeManager.Type.Tape &&
+                currentDamage.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
             return true;
         }
         return false;
     }
 
     public void ThisItemDied(TypeManager.Type giveType) {
-        if(activeItem.GetComponent<TypeManager>().type == giveType){
+        if (activeItem.GetComponent<TypeManager>().type == giveType) {
             activeItem.GetComponent<ToolBehaviour>().DestroyTool();
             isCarryingItem = false;
             activeItem = null;
         }
     }
 
-    void PlaceItemCorrectly(GameObject obj){
+    void PlaceItemCorrectly(GameObject obj) {
         obj.transform.position = new Vector3(transform.position.x, transform.position.y, -0.1f);
     }
 
     public void Damage() {
         health -= 0.34f;
         healthBar.value = health;
+        var sounds = Inside ? damageSounds : damageSoundsDim;
+        AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
+
         if (health <= 0) {
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+            sounds = Inside ? deathSounds : deathSoundsDim;
+            AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
             manager.GameOver();
-        } else {
-            AudioSource.PlayClipAtPoint(damageSound, transform.position);
         }
     }
 

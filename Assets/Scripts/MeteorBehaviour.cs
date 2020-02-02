@@ -17,7 +17,8 @@ public class MeteorBehaviour : MonoBehaviour
         initialPose = transform.position;
     }
 
-    public AudioClip shipHitSound;
+    public AudioClip[] shipHitSounds;
+    public AudioClip[] shipHitSoundsDim;
 
     void Start() {
         damagedContainer = GameObject.Find("All Damages").transform;
@@ -32,27 +33,37 @@ public class MeteorBehaviour : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        if(col.tag == "Wall") {
-            GameObject newFire = Instantiate(firePrefab, gameObject.transform.position, Quaternion.identity);
-            newFire.transform.parent = damagedContainer;
-            ShakeCamera();
-            AudioSource.PlayClipAtPoint(shipHitSound, transform.position);
-            Destroy(gameObject);
-        } else if (col.tag == "Player") {
+        if (col.tag == "Player") {
             col.GetComponent<PlayerScript>().Damage();
-            ShakeCamera();
-            Destroy(gameObject);
-        } else if (col.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
-            col.GetComponent<DamageController>().MakeDamaged();
-            col.GetComponent<DetachableObjectBehaviour>().MakeDamaged();
-            ShakeCamera();
-            Destroy(gameObject);
-        } else if (col.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
-            col.GetComponent<DamageController>().MakeDamaged();
-            col.GetComponent<DetachableObjectBehaviour>().MakeDamaged();
-            ShakeCamera();
-            Destroy(gameObject);
+        } 
+        else {
+            AudioSource.PlayClipAtPoint(shipHitSounds[Random.Range(0, shipHitSounds.Length)], transform.position);
+            AudioHelper.PlayInside(shipHitSoundsDim[Random.Range(0, shipHitSoundsDim.Length)]);
+
+            if (col.tag == "Wall") {
+                GameObject newFire = Instantiate(firePrefab, gameObject.transform.position, Quaternion.identity);
+                newFire.transform.parent = damagedContainer;
+            }
+            else if (col.GetComponent<TypeManager>()?.type == TypeManager.Type.Detachable) {
+                col.GetComponent<DamageController>().MakeDamaged();
+                col.GetComponent<DetachableObjectBehaviour>().MakeDamaged();
+                ShakeCamera();
+                Destroy(gameObject);
+            }
+            else if (col.GetComponent<TypeManager>()?.type == TypeManager.Type.Damageable) {
+                col.GetComponent<DamageController>().MakeDamaged();
+                col.GetComponent<DetachableObjectBehaviour>().MakeDamaged();
+                ShakeCamera();
+                Destroy(gameObject);
+            }
+            else {
+                Debug.LogWarning($"MeteorBehaviour: could not resolve collision");
+                Destroy(gameObject);
+            }
         }
+
+        ShakeCamera();
+        Destroy(gameObject);
     }
 
     void RotateCorrectly(){

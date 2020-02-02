@@ -9,6 +9,10 @@ TagManager:
   - Collectable
   - Inside
   - Spaceship
+  - AudioPlayer
+  - AudioPlayerInside
+  - AudioPlayerOutside
+  - ContinuousAudio
   layers:
   - Default
   - TransparentFX

@@ -284,4 +284,11 @@ MonoBehaviour:
   firePrefab: {fileID: 6166070138014300095, guid: d3ff7480030994ee0abe74e3a4f34617,
     type: 3}
   damagedContainer: {fileID: 0}
-  shipHitSound: {fileID: 8300000, guid: 5ac8fad76188f4141891b35565d4bb7a, type: 3}
+  shipHitSounds:
+  - {fileID: 8300000, guid: 5ac8fad76188f4141891b35565d4bb7a, type: 3}
+  - {fileID: 8300000, guid: 239af48dd20c0ef4bac40642d5d6ca5c, type: 3}
+  - {fileID: 8300000, guid: 1d04e96164898204f88ffa834f77d34f, type: 3}
+  shipHitSoundsDim:
+  - {fileID: 8300000, guid: 3031bc9751df59c4fb622e928e24c106, type: 3}
+  - {fileID: 8300000, guid: 18271828545bf824ba0e8cc6e8da1f68, type: 3}
+  - {fileID: 8300000, guid: 64414220fb450374190670668f29996d, type: 3}

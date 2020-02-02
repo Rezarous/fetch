@@ -122,6 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
+  reAttachSound: {fileID: 0}
+  repairSound: {fileID: 8300000, guid: 66aa8982262729d42b1d1ebfc2f3b161, type: 3}
 --- !u!114 &7865372657604454796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,3 +137,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  repairSound: {fileID: 8300000, guid: 66aa8982262729d42b1d1ebfc2f3b161, type: 3}
