@@ -351,7 +351,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &141144357
 PrefabInstance:
@@ -768,6 +768,7 @@ GameObject:
   - component: {fileID: 314134565}
   - component: {fileID: 314134566}
   - component: {fileID: 314134567}
+  - component: {fileID: 314134568}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -850,9 +851,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 40
+  m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 1
@@ -878,7 +879,7 @@ MonoBehaviour:
   throwForce: 5
   springForce: 5
   maxTetherLength: 4
-  attachedThrust: 500
+  attachedThrust: 18
   detachedThrust: 1
   maxSpeed: 5
   accelerationCurve:
@@ -896,15 +897,16 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0.48941177
-      inSlope: -0.024201699
-      outSlope: -0.024201699
+      inSlope: -1.6102971
+      outSlope: -1.6102971
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.2916667
+      inWeight: 0.02308458
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  tetherJoint: {fileID: 2005905655}
   inside: 1
   insideDrag: 0.1
   damageSounds:
@@ -939,7 +941,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4648d66506d61f949a9cfc09cce30e1b, type: 3}
   - {fileID: 8300000, guid: 5c49a4200d7a07c42a5dbbd779c680ea, type: 3}
   - {fileID: 8300000, guid: 5c49a4200d7a07c42a5dbbd779c680ea, type: 3}
-  pickup: {fileID: 8300000, guid: 096f9ef869803f0488d2906bbc0dcb7e, type: 3}
+  pickup: {fileID: 8300000, guid: a7135d8fa56c53a41b7a67dbf76bf644, type: 3}
   hitWall:
   - {fileID: 8300000, guid: 574b9a3fd488c1344a60c0a58a10a9eb, type: 3}
   - {fileID: 8300000, guid: b9d37190506f6ae418d4b145e844d6a5, type: 3}
@@ -967,6 +969,26 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.27
+--- !u!231 &314134568
+SpringJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314134562}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 2005905656}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_AutoConfigureDistance: 0
+  m_Distance: 0.005
+  m_DampingRatio: 0.5
+  m_Frequency: 10
 --- !u!1001 &358062520
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1116,7 +1138,7 @@ PrefabInstance:
     - target: {fileID: 2982799404639730489, guid: 03014afe3c31545f0bd33d0a9dee2737,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2982799404639730489, guid: 03014afe3c31545f0bd33d0a9dee2737,
         type: 3}
@@ -2216,7 +2238,7 @@ PrefabInstance:
     - target: {fileID: 3964779774158735686, guid: 546be579dea40bee38780e399e78a8b5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3964779774158735686, guid: 546be579dea40bee38780e399e78a8b5,
         type: 3}
@@ -3597,7 +3619,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1236533026
 MonoBehaviour:
@@ -4350,10 +4372,10 @@ Transform:
   m_GameObject: {fileID: 1534724903}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1553052656
 GameObject:
@@ -4675,10 +4697,10 @@ Transform:
   m_GameObject: {fileID: 1610453614}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1611253158
 GameObject:
@@ -5319,6 +5341,78 @@ Transform:
   m_Father: {fileID: 587524982}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2005905654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2005905657}
+  - component: {fileID: 2005905656}
+  - component: {fileID: 2005905655}
+  m_Layer: 0
+  m_Name: TetherSpring
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!232 &2005905655
+DistanceJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005905654}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_AutoConfigureDistance: 0
+  m_Distance: 0.005
+  m_MaxDistanceOnly: 1
+--- !u!50 &2005905656
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005905654}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.01
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!4 &2005905657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005905654}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2025625505
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5444,7 +5538,7 @@ PrefabInstance:
     - target: {fileID: 8614778891955702914, guid: c44020530a3bfe55d91992236ee09363,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8614778891955702914, guid: c44020530a3bfe55d91992236ee09363,
         type: 3}
