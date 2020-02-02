@@ -7,7 +7,7 @@ public class Ship : MonoBehaviour {
     public Slider healthBar;
     public Manager manager;
     float shipHealth = 1.0f;
-    public AudioSource warningSound;
+    public AudioClip warningSound;
 
     void Start() {
         healthBar.value = shipHealth;
@@ -28,7 +28,7 @@ public class Ship : MonoBehaviour {
         if (shipHealth <= 0.0f) {
             manager.GameOver();
         } else if (shipHealth <= 0.2) {
-            warningSound.Play();
+            AudioSource.PlayClipAtPoint(warningSound, transform.position);
         }
     }
 

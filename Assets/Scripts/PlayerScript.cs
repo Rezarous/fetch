@@ -20,8 +20,8 @@ public class PlayerScript : MonoBehaviour {
     public bool inside = true;
     public float insideDrag = 0.1f;
 
-    public AudioClip damageSound;
-    public AudioClip deathSound;
+    public AudioClip[] damageSounds;
+    public AudioClip[] deathSounds;
     public AudioClip pickup;
 
     public float health = 1.0f;
@@ -188,11 +188,11 @@ public class PlayerScript : MonoBehaviour {
     public void Damage() {
         health -= 0.34f;
         healthBar.value = health;
+        AudioSource.PlayClipAtPoint(damageSounds[Random.Range(0, damageSounds.Length)], transform.position);
+
         if (health <= 0) {
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+            AudioSource.PlayClipAtPoint(deathSounds[Random.Range(0, deathSounds.Length)], transform.position);
             manager.GameOver();
-        } else {
-            AudioSource.PlayClipAtPoint(damageSound, transform.position);
         }
     }
 }

@@ -997,8 +997,14 @@ MonoBehaviour:
   detachedThrust: 5
   inside: 1
   insideDrag: 1
-  damageSound: {fileID: 8300000, guid: 1f75bd248f5af3f49a3b917e88cc87dc, type: 3}
-  deathSound: {fileID: 8300000, guid: 0f37d13e90aac614fac45c381b49d719, type: 3}
+  damageSound:
+  - {fileID: 8300000, guid: 1f75bd248f5af3f49a3b917e88cc87dc, type: 3}
+  - {fileID: 8300000, guid: 9b6a9a8a12b7e864db801ac73a9b6e9c, type: 3}
+  deathSound:
+  - {fileID: 8300000, guid: 0f37d13e90aac614fac45c381b49d719, type: 3}
+  - {fileID: 8300000, guid: 9b6a9a8a12b7e864db801ac73a9b6e9c, type: 3}
+  - {fileID: 8300000, guid: cf662bbc78732d2419e907e6eddb66bf, type: 3}
+  - {fileID: 8300000, guid: 876af97d41d6d144a9d321382e0ed648, type: 3}
   pickup: {fileID: 8300000, guid: a7135d8fa56c53a41b7a67dbf76bf644, type: 3}
   health: 1
   healthBar: {fileID: 380367119}
