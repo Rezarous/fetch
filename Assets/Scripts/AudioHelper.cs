@@ -43,12 +43,16 @@ public class AudioHelper : MonoBehaviour
             audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
             yield return null;
         }
-        audioSource.Stop();
+
+        if (!audioSource.CompareTag("ContinuousAudio"))
+            audioSource.Stop();
     }
     public static IEnumerator FadeIn(AudioSource audioSource, float FadeTime) {
         float startVolume = startVolumes.ContainsKey(audioSource) ? startVolumes[audioSource] : audioSource.volume;
 
-        audioSource.Play();
+        if (!audioSource.CompareTag("ContinuousAudio"))
+            audioSource.Play();
+
         audioSource.volume = 0f;
         while (audioSource.volume < startVolume) {
             audioSource.volume += startVolume * Time.deltaTime / FadeTime;
