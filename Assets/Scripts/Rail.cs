@@ -6,9 +6,14 @@ using UnityEngine;
 public class Rail : MonoBehaviour
 {
 
+    private Vector3[] points;
+    public Vector3[] localPoints;
+
     [SerializeField]
-    public Vector3[] points;
-    
+    private LineRenderer railRenderer;
+
+    public EdgeCollider2D collider;
+
     private Color gizmoCol;
     private float currentPercentage;
     private float railLength;
@@ -16,12 +21,30 @@ public class Rail : MonoBehaviour
 
     void Start()
     {
+        points = new Vector3[localPoints.Length];
+        for (int i = 0; i < localPoints.Length; i++)
+        {
+            points[i] = this.transform.TransformPoint(localPoints[i]);
+        }
         railLength = getRailLength();
         gizmoCol = Color.blue;
         wasInside = false;
+        railRenderer.SetVertexCount(localPoints.Length);
+        railRenderer.SetPositions(localPoints);
+        Vector2[] points2d = new Vector2[localPoints.Length];
+        for(int i = 0; i < localPoints.Length; i++)
+        {
+            points2d[i] = toVec2(localPoints[i]);
+        }
+        collider.points = points2d;
     }
     public float getDistToRail(Vector2 point, out Vector2 closestPoint)
     {
+        points = new Vector3[localPoints.Length];
+        for(int i = 0; i < localPoints.Length; i++)
+        {
+            points[i] = this.transform.TransformPoint(localPoints[i]);
+        }
         
         float outdist = Mathf.Infinity;
         int closest = 0;
@@ -95,6 +118,12 @@ public class Rail : MonoBehaviour
         return a + (mul * ab); 
     }
 
+    public void resetRail()
+    {
+        wasInside = false;
+    }
+
+
     private bool isInside(Vector2 point)
     {
         bool inside = true;
@@ -124,6 +153,22 @@ public class Rail : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        points = new Vector3[localPoints.Length];
+        for (int i = 0; i < localPoints.Length; i++)
+        {
+            points[i] = this.transform.TransformPoint(localPoints[i]);
+        }
+
+
+        railRenderer.SetVertexCount(localPoints.Length);
+        railRenderer.SetPositions(localPoints);
+        Vector2[] points2d = new Vector2[localPoints.Length];
+        for (int i = 0; i < localPoints.Length; i++)
+        {
+            points2d[i] = toVec2(localPoints[i]);
+        }
+        collider.points = points2d;
+
         Gizmos.color = gizmoCol;
         if (points.Length > 1)
         {

@@ -19,7 +19,7 @@ public class Tether : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col) {
-        tethered = true;
+        player.tethered = true;
         player.SetRail(col.gameObject);
         AudioSource.PlayClipAtPoint(connectSound, transform.position);
         gameObject.SetActive(false);
@@ -27,7 +27,7 @@ public class Tether : MonoBehaviour
 
     public void DetachTether() {
         if (tethered) {
-            tethered = false;
+            player.tethered = false;
             AudioSource.PlayClipAtPoint(disconnectSound, transform.position);
         }
     }

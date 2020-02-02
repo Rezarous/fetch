@@ -36,8 +36,11 @@ public class PlayerScript : MonoBehaviour
     public AnimationCurve accelerationCurve;
     public DistanceJoint2D tetherJoint;
 
+    public Sprite deadDoggo;
+    public Sprite happyDoggo;
+
     public bool inside = true;
-    public bool tethered = true;
+    public bool tethered = false;
     public bool Inside {
         get { return inside; }
         set {
@@ -105,7 +108,7 @@ public class PlayerScript : MonoBehaviour
         player = gameObject;
         myRb = player.GetComponent<Rigidbody2D>();
         tetherRb = tether.GetComponent<Rigidbody2D>();
-
+        tethered = false;
         healthBar.value = health;
 
         transform.position = this.transform.position;
@@ -184,23 +187,44 @@ public class PlayerScript : MonoBehaviour
 
         }
 
-        lineRendererPoints = new Vector3[tether_points.Count + 1];
-        float tempTetherLength = 0;
-        int num = 0;
-        foreach (TetherAnchor t in tether_points) {
-            if (t.previousPoint != null) {
-                Debug.DrawLine(t.previousPoint.anchorPoint, t.anchorPoint, tetherLength > maxTetherLength ? Color.red : Color.white);
-                tempTetherLength += Vector2.Distance(t.previousPoint.anchorPoint, t.anchorPoint);
+        bool renderLine = true;
+        if (!tethered)
+        {
+            if (tether.active)
+            {
+                tether_points.Peek().anchorPoint = toVec2(tether.transform.position);
             }
-            lineRendererPoints[num + 1] = new Vector3(t.anchorPoint.x, t.anchorPoint.y, -0.01f);
-            num++;
+            else
+            {
+                renderLine = false;
+            }
         }
 
-        tempTetherLength += Vector2.Distance(tether_points.Peek().anchorPoint, position);
-        tetherLength = tempTetherLength;
-        lineRendererPoints[0] = position;
-        tetherLine.SetVertexCount(lineRendererPoints.Length);
-        tetherLine.SetPositions(lineRendererPoints);
+        if (renderLine)
+        {
+            tetherLine.enabled = true;
+            lineRendererPoints = new Vector3[tether_points.Count + 1];
+            float tempTetherLength = 0;
+            int num = 0;
+        foreach (TetherAnchor t in tether_points) {
+            if (t.previousPoint != null) {
+                    Debug.DrawLine(t.previousPoint.anchorPoint, t.anchorPoint, tetherLength > maxTetherLength ? Color.red : Color.white);
+                    tempTetherLength += Vector2.Distance(t.previousPoint.anchorPoint, t.anchorPoint);
+                }
+            lineRendererPoints[num+1] = new Vector3(t.anchorPoint.x, t.anchorPoint.y, -0.01f);
+                num++;
+            }
+
+            tempTetherLength += Vector2.Distance(tether_points.Peek().anchorPoint, position);
+            tetherLength = tempTetherLength;
+            lineRendererPoints[0] = position;
+            tetherLine.SetVertexCount(lineRendererPoints.Length);
+            tetherLine.SetPositions(lineRendererPoints);
+        }
+        else
+        {
+            tetherLine.enabled = false;
+        }
     }
 
     public void resetTether() {
@@ -210,7 +234,7 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate() {
         Camera.main.transform.position = transform.position + new Vector3(0, 0, -10);
-        bool tethered = tether.GetComponent<Tether>().tethered;
+        //bool tethered = tether.GetComponent<Tether>().tethered;
 
         if (!tether.activeSelf) {
             tether.transform.position = transform.position;
@@ -221,6 +245,7 @@ public class PlayerScript : MonoBehaviour
                 else {
                     currentRail = null;
                     resetTether();
+                    //tether.GetComponent<Tether>().DetachTether();
                     tethered = false;
                 }
             }
@@ -280,6 +305,7 @@ public class PlayerScript : MonoBehaviour
 
     public void SetRail(GameObject rail) {
         currentRail = rail.GetComponent<Rail>();
+        currentRail.resetRail();
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -390,9 +416,14 @@ public class PlayerScript : MonoBehaviour
 
         if (health <= 0) {
             sounds = Inside ? deathSounds : deathSoundsDim;
+            GetComponent<SpriteRenderer>().sprite = deadDoggo;
             AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
             manager.GameOver();
         }
+    }
+
+    public void GoodBoy() {
+        GetComponent<SpriteRenderer>().sprite = happyDoggo;
     }
 
     private void createNewAnchor(RaycastHit hit, TetherAnchor prevPoint, float prevangle) {
