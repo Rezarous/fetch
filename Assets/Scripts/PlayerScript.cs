@@ -27,7 +27,7 @@ public class PlayerScript : MonoBehaviour {
     public float health = 1.0f;
     public Slider healthBar;
 
-    GameObject activeItem;
+    public GameObject activeItem;
     GameObject player;
     GameObject pickableItem;
     GameObject currentDamage;
@@ -159,6 +159,7 @@ public class PlayerScript : MonoBehaviour {
         isItemAllowed = ItemCheck();
         if(currentDamage != null && isItemAllowed){
             currentDamage.GetComponent<DamageController>().ReduceDamage();
+            item.GetComponent<ToolBehaviour>().UseAndReduce();
         }
     }
 
@@ -179,6 +180,14 @@ public class PlayerScript : MonoBehaviour {
             return true;
         }
         return false;
+    }
+
+    public void ThisItemDied(TypeManager.Type giveType) {
+        if(activeItem.GetComponent<TypeManager>().type == giveType){
+            activeItem.GetComponent<ToolBehaviour>().DestroyTool();
+            isCarryingItem = false;
+            activeItem = null;
+        }
     }
 
     void PlaceItemCorrectly(GameObject obj){

@@ -10,11 +10,41 @@ public class Manager : MonoBehaviour {
     float victoryTime;
     bool finalSalvoFired = false;
 
+    public GameObject wrenchBase;
+    public GameObject tapeBase;
+    public GameObject fireExBase;
+
+    public GameObject wrenchPrefab;
+    public GameObject tapePrefab;
+    public GameObject fireExPrefab;
+
+    public PlayerScript player;
+
+    GameObject currentWrench;
+    GameObject currentTape;
+    GameObject currentFireEx;
+    GameObject currentActiveItem;
+
     void Start() {
         meteorManager = gameObject.GetComponent<MeteorManager>();
+
+        currentWrench = InstantiateTool(wrenchPrefab, wrenchBase);
+        currentTape = InstantiateTool(tapePrefab, tapeBase);
+        currentFireEx = InstantiateTool(fireExPrefab, fireExBase);
     }
 
     void Update() {
+        if(currentWrench.GetComponent<ToolBehaviour>().isFinished) {
+            player.ThisItemDied(currentWrench.GetComponent<TypeManager>().type);
+            currentWrench = InstantiateTool(wrenchPrefab, wrenchBase);
+        } else if(currentTape.GetComponent<ToolBehaviour>().isFinished) {
+            player.ThisItemDied(currentTape.GetComponent<TypeManager>().type);
+            currentTape = InstantiateTool(tapePrefab, tapeBase);
+        } else if(currentFireEx.GetComponent<ToolBehaviour>().isFinished) {
+            player.ThisItemDied(currentFireEx.GetComponent<TypeManager>().type);
+            currentFireEx = InstantiateTool(fireExPrefab, fireExBase);
+        }
+
         if (finalSalvoFired == false && meteorManager.salvosRemaining == 0) {
             finalSalvoFired = true;
             victoryTime = Time.time + 20;
@@ -33,5 +63,9 @@ public class Manager : MonoBehaviour {
     public void GameOver() {
         gameOver.SetActive(true);
         gameActive = false;
+    }
+
+    GameObject InstantiateTool(GameObject obj, GameObject obj2){
+        return Instantiate(obj, obj2.transform.position, Quaternion.identity);
     }
 }

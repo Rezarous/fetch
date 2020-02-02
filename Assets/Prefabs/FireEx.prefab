@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2132449871151401568}
   - component: {fileID: 2132449871151401569}
   - component: {fileID: 7053513464513917959}
+  - component: {fileID: -7064933429979129890}
   m_Layer: 0
   m_Name: FireEx
   m_TagString: Collectable
@@ -121,3 +122,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+--- !u!114 &-7064933429979129890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132449871151401570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ece184dfc9ea7493c88fe9bccda85ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  isFinished: 0
