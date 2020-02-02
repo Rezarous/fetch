@@ -25,6 +25,7 @@ public class PlayerScript : MonoBehaviour
     public bool isCarryingItem = false;
 
     public GameObject tether;
+    public LineRenderer tetherLine;
     public float throwForce = 5.0f;
     public float springForce = 10.0f;
     public float maxTetherLength = 2.0f;
@@ -90,6 +91,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private Rail currentRail;
 
+    public Vector3[] lineRendererPoints;
+
     void Start() {
         player = gameObject;
         myRb = player.GetComponent<Rigidbody2D>();
@@ -135,7 +138,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         ///////////////////////////////////////////////////////
-        
+
         RaycastHit playerTrace;
         if (tether_points.Count > 1)
         {
@@ -177,7 +180,9 @@ public class PlayerScript : MonoBehaviour
             Debug.DrawLine(tether_points.Peek().anchorPoint, position, tetherLength > maxTetherLength ? Color.red : Color.white);
         }
 
+        lineRendererPoints = new Vector3[tether_points.Count + 1];
         float tempTetherLength = 0;
+        int num = 0;
         foreach(TetherAnchor t in tether_points)
         {
             if (t.previousPoint != null)
@@ -185,9 +190,14 @@ public class PlayerScript : MonoBehaviour
                 Debug.DrawLine(t.previousPoint.anchorPoint, t.anchorPoint, tetherLength > maxTetherLength ? Color.red : Color.white);
                 tempTetherLength += Vector2.Distance(t.previousPoint.anchorPoint, t.anchorPoint);
             }
+            lineRendererPoints[num+1] = new Vector3(t.anchorPoint.x, t.anchorPoint.y, -0.01f);
+            num++;
         }
         tempTetherLength += Vector2.Distance(tether_points.Peek().anchorPoint, position);
         tetherLength = tempTetherLength;
+        lineRendererPoints[0] = position;
+        tetherLine.SetVertexCount(lineRendererPoints.Length);
+        tetherLine.SetPositions(lineRendererPoints);
     }
 
     void FixedUpdate() {
