@@ -37,6 +37,9 @@ public class PlayerScript : MonoBehaviour
     public AnimationCurve accelerationCurve;
     public DistanceJoint2D tetherJoint;
 
+    public Sprite deadDoggo;
+    public Sprite happyDoggo;
+
     public bool inside = true;
     public bool tethered = true;
     public bool Inside {
@@ -396,9 +399,14 @@ public class PlayerScript : MonoBehaviour
 
         if (health <= 0) {
             sounds = Inside ? deathSounds : deathSoundsDim;
+            GetComponent<SpriteRenderer>().sprite = deadDoggo;
             AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
             manager.GameOver();
         }
+    }
+
+    public void GoodBoy() {
+        GetComponent<SpriteRenderer>().sprite = happyDoggo;
     }
 
     private void createNewAnchor(RaycastHit hit, TetherAnchor prevPoint, float prevangle)
