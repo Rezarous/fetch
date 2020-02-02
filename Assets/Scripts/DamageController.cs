@@ -40,6 +40,7 @@ public class DamageController : MonoBehaviour
                     FadeFireAway();
                 }
                 else {
+                    ship.Repair();
                     Destroy(gameObject);
                 }
                 break;
@@ -49,6 +50,7 @@ public class DamageController : MonoBehaviour
                     FixDetachable();
                 }
                 else {
+                    ship.Repair();
                     if (reAttachSound != null) {
                         AudioHelper.PlayInside(reAttachSound);
                         AudioHelper.PlayOutside(reAttachSound);
