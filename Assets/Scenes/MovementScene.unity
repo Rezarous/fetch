@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1349,7 +1349,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 162049663
-  m_SortingLayer: 0
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2ea8e818d7f9e0bcf961a47b8d1b7c2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1405,7 +1405,7 @@ MonoBehaviour:
   springForce: 0.5
   maxTetherLength: 4
   attachedThrust: 18
-  detachedThrust: 1
+  detachedThrust: 0.3
   maxSpeed: 5
   accelerationCurve:
     serializedVersion: 2
@@ -1482,7 +1482,6 @@ MonoBehaviour:
   outsideBufferDist: 0.01
   currentRail: {fileID: 0}
   lineRendererPoints: []
-  autoConnectTimeout: 0.1
 --- !u!58 &314134567
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5753,7 +5752,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 162049663
-  m_SortingLayer: 0
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 70679c874007b4a8fa13e82f4de03b5c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -7114,7 +7113,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1446565103
-  m_SortingLayer: 0
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e486e4600b0a18f89aa7eb0f9fb675b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -7334,7 +7333,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2118253083
-  m_SortingLayer: 0
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f30368169b6437312ab9993ba7da9165, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
