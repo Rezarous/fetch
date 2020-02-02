@@ -20,6 +20,7 @@ public class TetherAnchor
 [RequireComponent(typeof(AudioSource))]
 public class PlayerScript : MonoBehaviour
 {
+    public Camera cam;
     public Manager manager;
     public GameObject allCollectables;
     public bool isCarryingItem = false;
@@ -258,13 +259,13 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (currentRail == null) {
+        /*if (currentRail == null) {
             Vector3 tetherDiff = tether.transform.position - transform.position;
             if (tetherDiff.magnitude > maxTetherLength) {
                 tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
                 myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
             }
-        }
+        }*/
 
         if (tethered)
         {
@@ -291,6 +292,9 @@ public class PlayerScript : MonoBehaviour
             float dotprod = Mathf.Clamp01(Vector3.Dot(accelerationVector, myRb.velocity));
             accelerationVector = Vector3.Lerp(accelerationVector, accelerationVector - accelComponentInDir, dotprod);
         }
+
+        accelerationVector = cam.transform.TransformVector(accelerationVector);
+
         if (manager.gameActive) {
             myRb.AddForce(toVec2(accelerationVector));
         }
