@@ -13,6 +13,9 @@ public class DamageController : MonoBehaviour
 
     public AudioClip reAttachSound;
     public AudioClip repairSound;
+    public GameObject indicator;
+
+    GameObject activeIndicator;
 
     void OnEnable() {
         ship = GameObject.FindGameObjectWithTag("Spaceship").GetComponent<Ship>();
@@ -28,6 +31,8 @@ public class DamageController : MonoBehaviour
                 damage = 0;
                 break;
         }
+
+        activeIndicator = Instantiate(indicator, transform.position, Quaternion.identity);
     }
 
     // Called from the player
@@ -82,6 +87,11 @@ public class DamageController : MonoBehaviour
         a = damage / 200.0f;
         color = new Color(r, g, b, a);
         GetComponent<SpriteRenderer>().color = color;
+    }
+
+    public void ShowIndicator(Vector2 point) {
+        print("Trying to show the indicator");
+        activeIndicator.transform.position = point;
     }
 
 }

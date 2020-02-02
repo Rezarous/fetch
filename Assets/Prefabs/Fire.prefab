@@ -125,6 +125,8 @@ MonoBehaviour:
   damage: 0
   reAttachSound: {fileID: 0}
   repairSound: {fileID: 8300000, guid: 66aa8982262729d42b1d1ebfc2f3b161, type: 3}
+  indicator: {fileID: 6068956979596194234, guid: d8403c37db81e4e109b5675e206745bb,
+    type: 3}
 --- !u!114 &7865372657604454796
 MonoBehaviour:
   m_ObjectHideFlags: 0

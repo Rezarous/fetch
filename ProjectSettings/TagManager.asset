@@ -13,6 +13,7 @@ TagManager:
   - AudioPlayerInside
   - AudioPlayerOutside
   - ContinuousAudio
+  - ScreenEdge
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Rail
   - Walls
   - Tether Boxes
-  - 
+  - ScreenEdge
   - 
   - 
   - 
