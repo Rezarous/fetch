@@ -6,9 +6,11 @@ using UnityEngine;
 public class Rail : MonoBehaviour
 {
 
-    [SerializeField]
     public Vector3[] points;
-    
+
+    [SerializeField]
+    public Vector3[] localPoints;
+
     private Color gizmoCol;
     private float currentPercentage;
     private float railLength;
@@ -22,7 +24,13 @@ public class Rail : MonoBehaviour
     }
     public float getDistToRail(Vector2 point, out Vector2 closestPoint)
     {
-        
+
+        points = new Vector3[localPoints.Length];
+        for(int i = 0; i < localPoints.Length; i++)
+        {
+            points[i] = this.transform.TransformPoint(localPoints[i]);
+        }
+
         float outdist = Mathf.Infinity;
         int closest = 0;
         bool inside = isInside(point);
@@ -124,6 +132,12 @@ public class Rail : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        points = new Vector3[localPoints.Length];
+        for (int i = 0; i < localPoints.Length; i++)
+        {
+            points[i] = this.transform.TransformPoint(localPoints[i]);
+        }
+
         Gizmos.color = gizmoCol;
         if (points.Length > 1)
         {
