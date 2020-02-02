@@ -256,12 +256,7 @@ public class PlayerScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Damage") {
             currentDamage = other.gameObject;
-        }
-        else if (other.tag == "Inside") {
-            Inside = true;
-            myRb.drag = insideDrag;
-        }
-    }
+        }    }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         AudioHelper.PlayInside(hitWall[Random.Range(0, hitWall.Length)], 0.01f, 0.05f, 0.2f);
@@ -276,6 +271,11 @@ public class PlayerScript : MonoBehaviour
         if (obj.tag == "Damage") {
             currentDamage = obj.gameObject;
         }
+        if (obj.tag == "Inside") {
+            Inside = true;
+            myRb.drag = insideDrag;
+        }
+
     }
 
     void OnTriggerExit2D(Collider2D other) {
