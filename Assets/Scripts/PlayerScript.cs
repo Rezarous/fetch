@@ -193,6 +193,9 @@ public class PlayerScript : MonoBehaviour
         if (currentDamage != null && isItemAllowed) {
             currentDamage.GetComponent<DamageController>().ReduceDamage();
             item.GetComponent<ToolBehaviour>().UseAndReduce();
+
+            AudioHelper.PlayInside(barkSounds[Random.Range(0, barkSounds.Length)], 0.05f);
+            AudioHelper.PlayOutside(barkSoundsDim[Random.Range(0, barkSoundsDim.Length)], 0.05f);
         }
     }
 

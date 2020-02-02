@@ -19,8 +19,6 @@ public class Ship : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.J)) {
-            AudioHelper.PlayInside(damageWarningSound);
-            AudioHelper.PlayOutside(playerWarningSound);
             Damage();
         }
         if (Input.GetKeyDown(KeyCode.K)) {
@@ -31,9 +29,14 @@ public class Ship : MonoBehaviour {
     public void Damage() {
         shipHealth -= 0.1f;
         healthBar.value = shipHealth;
+
+        AudioHelper.PlayInside(damageWarningSound);
+        AudioHelper.PlayOutside(playerWarningSound);
+
         if (shipHealth <= 0.0f) {
             manager.GameOver();
-        } else if (shipHealth <= 0.2) {
+        } 
+        else if (shipHealth <= 0.2) {
             AudioHelper.PlayInside(lowHealthWarningSound);
             AudioHelper.PlayOutside(playerWarningSound);
             AudioHelper.PlayOutside(playerWarningSoundSevere);

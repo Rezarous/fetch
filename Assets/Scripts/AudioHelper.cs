@@ -26,11 +26,12 @@ public class AudioHelper : MonoBehaviour
         Play(AudioInside, audioClip, pitchJitter, minVolume);
     }
     private static void Play(AudioSource source, AudioClip audioClip, float pitchJitter = 0f, float minVolume = 1f) {
+        float oldPitch = source.pitch;
         if (pitchJitter > 0f)
             source.pitch = Random.Range(-pitchJitter, pitchJitter);
 
         source.PlayOneShot(audioClip, minVolume < 1f && minVolume >= 0f ? Random.Range(minVolume, 1f) : 1f);
-        source.pitch = 1f;
+        source.pitch = oldPitch;
     }
 
     public static IEnumerator FadeOut(AudioSource audioSource, float FadeTime) {
