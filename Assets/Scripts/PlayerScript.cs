@@ -91,6 +91,7 @@ public class PlayerScript : MonoBehaviour
     Rigidbody2D tetherRb;
 
     bool isWithinACollectable = false;
+    bool isWithinDamage = false;
     bool isItemAllowed = false;
 
     private float tetherLength;
@@ -145,20 +146,25 @@ public class PlayerScript : MonoBehaviour
         position.x = transform.position.x;
         position.y = transform.position.y;
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if (isWithinACollectable && !isCarryingItem) {
-                PickUpItem(pickableItem);
+        if (Input.GetMouseButton(1)) {
+            if(Input.GetMouseButtonDown(1)){
+                if (isCarryingItem){
+                    if (isWithinDamage) {
+                        UseItem(activeItem);
+                    } else if(isWithinACollectable) {
+                        SwapItem();
+                    } else {
+                        DropItem();
+                    }
+                } else {
+                    if(isWithinACollectable) {
+                        PickUpItem(pickableItem);
+                    }
+                }
             }
-            else if (isWithinACollectable && isCarryingItem) {
-                SwapItem();
+            if(isCarryingItem && isWithinDamage){
+                UseItem(activeItem);
             }
-            else if (isCarryingItem) {
-                DropItem();
-            }
-        }
-
-        if (Input.GetKey(KeyCode.F) && isCarryingItem) {
-            UseItem(activeItem);
         }
 
         if (!tether.activeSelf) {
@@ -181,7 +187,6 @@ public class PlayerScript : MonoBehaviour
                 tether.SetActive(false);
             }
         }
-
 
         ///////////////////////////////////////////////////////
 
@@ -354,6 +359,7 @@ public class PlayerScript : MonoBehaviour
             pickableItem = obj.transform.gameObject;
         }
         if (obj.tag == "Damage") {
+            isWithinDamage = true;
             currentDamage = obj.gameObject;
         }
         if (obj.tag == "Inside") {
@@ -364,12 +370,15 @@ public class PlayerScript : MonoBehaviour
     }
 
     void OnTriggerExit2D(Collider2D other) {
-        isWithinACollectable = false;
+        if (other.tag == "Collectable") {
+            isWithinACollectable = false;
+        }
         if (other.tag == "Inside") {
             Inside = false;   
             myRb.drag = 0;
         }
         if (other.tag == "Damage") {
+            isWithinDamage = false;
             currentDamage = null;
         }
     }
