@@ -233,6 +233,10 @@ public class PlayerScript : MonoBehaviour
     }
 
     void FixedUpdate() {
+        Debug.Log(transform.position.magnitude);
+        if (transform.position.magnitude > 20) {
+            Die();
+        }
         Camera.main.transform.position = transform.position + new Vector3(0, 0, -10);
         //bool tethered = tether.GetComponent<Tether>().tethered;
 
@@ -415,11 +419,19 @@ public class PlayerScript : MonoBehaviour
         AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
 
         if (health <= 0) {
-            sounds = Inside ? deathSounds : deathSoundsDim;
-            GetComponent<SpriteRenderer>().sprite = deadDoggo;
-            AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
-            manager.GameOver();
+            Die();
         }
+    }
+
+    public void Die() {
+        var sounds = Inside ? damageSounds : damageSoundsDim;
+
+        health = 0.0f;
+        healthBar.value = health;
+        sounds = Inside ? deathSounds : deathSoundsDim;
+        GetComponent<SpriteRenderer>().sprite = deadDoggo;
+        AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
+        manager.GameOver();
     }
 
     public void GoodBoy() {
