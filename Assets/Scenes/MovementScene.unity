@@ -979,9 +979,9 @@ MonoBehaviour:
   allCollectables: {fileID: 1948346458}
   isCarryingItem: 0
   tether: {fileID: 1236533023}
+  tetherLine: {fileID: 1456979132}
   throwForce: 0.5
   springForce: 0.5
-  tetherLine: {fileID: 1456979132}
   maxTetherLength: 4
   attachedThrust: 18
   detachedThrust: 1
@@ -1012,6 +1012,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   tetherJoint: {fileID: 2005905655}
   inside: 1
+  tethered: 1
   insideDrag: 0.1
   damageSounds:
   - {fileID: 8300000, guid: 1f75bd248f5af3f49a3b917e88cc87dc, type: 3}
@@ -2103,6 +2104,7 @@ Transform:
   - {fileID: 31666503}
   - {fileID: 843651037}
   - {fileID: 256690158}
+  - {fileID: 1482552243}
   m_Father: {fileID: 587524982}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4093,7 +4095,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 693963532}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1482552244
 MonoBehaviour:
@@ -5385,6 +5387,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8614778891955702915, guid: c44020530a3bfe55d91992236ee09363,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.554
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c44020530a3bfe55d91992236ee09363, type: 3}

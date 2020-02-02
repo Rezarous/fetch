@@ -42,8 +42,12 @@ public class PlayerScript : MonoBehaviour
     public bool Inside {
         get { return inside; }
         set {
+            if (inside == value) return;
+
             inside = value;
             foreach (var audioSource in FindObjectsOfType<AudioSource>()) {
+                if (!audioSource.loop) return;
+
                 if ((inside == false && audioSource.outputAudioMixerGroup?.audioMixer?.name == "inside") ||
                     (inside == true && audioSource.outputAudioMixerGroup?.audioMixer?.name == "outside")) {
                     StartCoroutine(AudioHelper.FadeOut(audioSource, 1f));
