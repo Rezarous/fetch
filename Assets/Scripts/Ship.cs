@@ -7,7 +7,11 @@ public class Ship : MonoBehaviour {
     public Slider healthBar;
     public Manager manager;
     float shipHealth = 1.0f;
-    public AudioClip warningSound;
+
+    public AudioClip damageWarningSound;
+    public AudioClip lowHealthWarningSound;
+    public AudioClip playerWarningSound;
+    public AudioClip playerWarningSoundSevere;
 
     void Start() {
         healthBar.value = shipHealth;
@@ -15,6 +19,8 @@ public class Ship : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.J)) {
+            AudioHelper.PlayInside(damageWarningSound);
+            AudioHelper.PlayOutside(playerWarningSound);
             Damage();
         }
         if (Input.GetKeyDown(KeyCode.K)) {
@@ -28,7 +34,9 @@ public class Ship : MonoBehaviour {
         if (shipHealth <= 0.0f) {
             manager.GameOver();
         } else if (shipHealth <= 0.2) {
-            AudioSource.PlayClipAtPoint(warningSound, transform.position);
+            AudioHelper.PlayInside(lowHealthWarningSound);
+            AudioHelper.PlayOutside(playerWarningSound);
+            AudioHelper.PlayOutside(playerWarningSoundSevere);
         }
     }
 
