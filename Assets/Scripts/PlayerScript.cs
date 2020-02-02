@@ -20,6 +20,7 @@ public class TetherAnchor
 public class PlayerScript : MonoBehaviour
 {
     public Camera cam;
+    public Material matDeathUI;
     public Manager manager;
     public GameObject allCollectables;
     public bool isCarryingItem = false;
@@ -144,6 +145,8 @@ public class PlayerScript : MonoBehaviour
 
         position.x = transform.position.x;
         position.y = transform.position.y;
+
+        matDeathUI.SetFloat("_Strength", Mathf.Clamp01((Vector2.Distance(Vector2.zero, position)-15)/5));
 
         if (Input.GetKeyDown(KeyCode.Space)) {
             if (isWithinACollectable && !isCarryingItem) {
