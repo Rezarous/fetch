@@ -19,39 +19,47 @@ public class TetherAnchor
 
 [RequireComponent(typeof(AudioSource))]
 public class PlayerScript : MonoBehaviour {
+
     public Manager manager;
     public GameObject allCollectables;
     public bool isCarryingItem = false;
+    public GameObject activeItem;
+    GameObject player;
+    Rigidbody2D myRb;
+    GameObject pickableItem;
+    GameObject currentDamage;
+
+    [Space(20)]
+
+    public float health = 1.0f;
+    public Slider healthBar;
+
+    [Space(20)]
 
     public GameObject tether;
+    Rigidbody2D tetherRb;
+    public DistanceJoint2D tetherJoint;
     public float throwForce = 5.0f;
     public float springForce = 10.0f;
     public float maxTetherLength = 2.0f;
+    public AnimationCurve accelerationCurve;
+    
+    [Space(20)]
 
     public float attachedThrust = 200.0f;
     public float detachedThrust = 5.0f;
     public float maxSpeed = 200.0f;
 
-    public AnimationCurve accelerationCurve;
-    public DistanceJoint2D tetherJoint;
+    [Space(20)]
 
     public bool inside = true;
     public float insideDrag = 0.1f;
 
+    [Space(20)]
+
     public AudioClip damageSound;
     public AudioClip deathSound;
     public AudioClip pickup;
-
-    public float health = 1.0f;
-    public Slider healthBar;
-
-    public GameObject activeItem;
-    GameObject player;
-    GameObject pickableItem;
-    GameObject currentDamage;
-
-    Rigidbody2D myRb;
-    Rigidbody2D tetherRb;
     
     bool isWithinACollectable = false;
     bool isItemAllowed = false;
