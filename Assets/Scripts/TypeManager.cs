@@ -15,5 +15,4 @@ public class TypeManager : MonoBehaviour
     }
 
     public Type type;
-    public AudioClip repairSound;
 }
