@@ -11,18 +11,22 @@ public class DamageController : MonoBehaviour
     Quaternion initialRot;
     Ship ship;
 
+    public AudioClip reAttachSound;
+    public AudioClip repairSound;
+
     void OnEnable() {
         ship = GameObject.FindGameObjectWithTag("Spaceship").GetComponent<Ship>();
         initialRot = transform.localRotation;
-        if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
-            ship.Damage();
-            damage = 100;
-        }
-        else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
-            damage = 0;
-        }
-        else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
-            damage = 0;
+
+        switch(gameObject.GetComponent<TypeManager>().type) {
+            case TypeManager.Type.Fire:
+                ship.Damage();
+                damage = 100;
+                break;
+            case TypeManager.Type.Detachable:
+            case TypeManager.Type.Damageable:
+                damage = 0;
+                break;
         }
     }
 
@@ -45,10 +49,19 @@ public class DamageController : MonoBehaviour
                     FixDetachable();
                 }
                 else {
+                    if (reAttachSound != null) {
+                        AudioHelper.PlayInside(reAttachSound);
+                        AudioHelper.PlayOutside(reAttachSound);
+                    }
                     GetComponent<DetachableObjectBehaviour>().MakeHealty();
                     transform.localRotation = initialRot;
                 }
                 break;
+        }
+
+        if (repairSound != null) {
+            AudioHelper.PlayInside(repairSound);
+            AudioHelper.PlayOutside(repairSound);
         }
     }
 
