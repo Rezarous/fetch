@@ -9,8 +9,7 @@ public class TetherAnchor
     public Vector2 anchorPoint;
     public TetherAnchor previousPoint;
     public float prevangle;
-    public TetherAnchor (Vector2 new_anchorPoint, TetherAnchor new_prevPoint, float new_prevangle)
-    {
+    public TetherAnchor(Vector2 new_anchorPoint, TetherAnchor new_prevPoint, float new_prevangle) {
         anchorPoint = new_anchorPoint;
         previousPoint = new_prevPoint;
         prevangle = new_prevangle;
@@ -38,23 +37,30 @@ public class PlayerScript : MonoBehaviour
     public AnimationCurve accelerationCurve;
     public DistanceJoint2D tetherJoint;
 
+    public Sprite deadDoggo;
+    public Sprite happyDoggo;
+
     public bool inside = true;
     public bool tethered = false;
     public bool Inside {
         get { return inside; }
         set {
-            if (inside == value) return;
+            //if (inside == value) return;
 
             inside = value;
             foreach (var audioSource in FindObjectsOfType<AudioSource>()) {
-                if (!audioSource.loop) return;
+                //if (!audioSource.loop) return;
 
                 if ((inside == false && audioSource.outputAudioMixerGroup?.audioMixer?.name == "inside") ||
                     (inside == true && audioSource.outputAudioMixerGroup?.audioMixer?.name == "outside")) {
-                    StartCoroutine(AudioHelper.FadeOut(audioSource, 1f));
+                    audioSource.mute = true;
+                    //if (audioSource.volume > 0)
+                    //    StartCoroutine(AudioHelper.FadeOut(audioSource, 1f));
                 }
                 else {
-                    StartCoroutine(AudioHelper.FadeIn(audioSource, 1f));
+                    audioSource.mute = false;
+                    //if (audioSource.volume == 0)
+                    //    StartCoroutine(AudioHelper.FadeIn(audioSource, 1f));
                 }
             }
         }
@@ -83,7 +89,7 @@ public class PlayerScript : MonoBehaviour
 
     Rigidbody2D myRb;
     Rigidbody2D tetherRb;
-    
+
     bool isWithinACollectable = false;
     bool isItemAllowed = false;
 
@@ -116,8 +122,8 @@ public class PlayerScript : MonoBehaviour
         position.x = transform.position.x;
         position.y = transform.position.y;
 
-        if(Input.GetKeyDown(KeyCode.Space)){
-            if(isWithinACollectable && !isCarryingItem){
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if (isWithinACollectable && !isCarryingItem) {
                 PickUpItem(pickableItem);
             }
             else if (isWithinACollectable && isCarryingItem) {
@@ -134,11 +140,9 @@ public class PlayerScript : MonoBehaviour
 
         ///////////////////////////////////////////////////////
 
-        if (tethered)
-        {
+        if (tethered) {
 
-            if (tether_points.Count < 2 && currentRail)
-            {
+            if (tether_points.Count < 2 && currentRail) {
                 Vector2 closestPoint = Vector2.zero;
                 float distToRail = currentRail.getDistToRail(toVec2(transform.position), out closestPoint);
                 tether_points.Peek().anchorPoint = closestPoint;
@@ -146,8 +150,7 @@ public class PlayerScript : MonoBehaviour
             }
 
             RaycastHit playerTrace;
-            if (tether_points.Count > 1)
-            {
+            if (tether_points.Count > 1) {
                 Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
                 Vector3 prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
 
@@ -155,8 +158,7 @@ public class PlayerScript : MonoBehaviour
                 Vector2 flippedPrevDir = new Vector2(-prevdir.y, prevdir.x);
                 float angle = Mathf.Sign(Vector2.Dot(toVec2(dir).normalized, flippedPrevDir.normalized));
 
-                if (hitBox)
-                {
+                if (hitBox) {
                     createNewAnchor(playerTrace, tether_points.Peek(), angle);
                     dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
                     prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
@@ -170,12 +172,10 @@ public class PlayerScript : MonoBehaviour
                 if (angle != tether_points.Peek().prevangle) tether_points.Pop();
 
             }
-            else
-            {
+            else {
                 Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
                 bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 11);
-                if (hitBox)
-                {
+                if (hitBox) {
                     createNewAnchor(playerTrace, tether_points.Peek(), 1);
                     dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
                     Vector3 prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
@@ -207,14 +207,12 @@ public class PlayerScript : MonoBehaviour
             lineRendererPoints = new Vector3[tether_points.Count + 1];
             float tempTetherLength = 0;
             int num = 0;
-            foreach (TetherAnchor t in tether_points)
-            {
-                if (t.previousPoint != null)
-                {
+        foreach (TetherAnchor t in tether_points) {
+            if (t.previousPoint != null) {
                     Debug.DrawLine(t.previousPoint.anchorPoint, t.anchorPoint, tetherLength > maxTetherLength ? Color.red : Color.white);
                     tempTetherLength += Vector2.Distance(t.previousPoint.anchorPoint, t.anchorPoint);
                 }
-                lineRendererPoints[num + 1] = new Vector3(t.anchorPoint.x, t.anchorPoint.y, -0.01f);
+            lineRendererPoints[num+1] = new Vector3(t.anchorPoint.x, t.anchorPoint.y, -0.01f);
                 num++;
             }
 
@@ -230,8 +228,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    public void resetTether()
-    {
+    public void resetTether() {
         tether_points = new Stack<TetherAnchor>();
         tether_points.Push(new TetherAnchor(position, null, 0));
     }
@@ -245,14 +242,16 @@ public class PlayerScript : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) {
                 if (currentRail == null) {
                     ThrowTether();
-                } else {
+                }
+                else {
                     currentRail = null;
                     resetTether();
                     //tether.GetComponent<Tether>().DetachTether();
                     tethered = false;
                 }
             }
-        } else {
+        }
+        else {
             if (Input.GetMouseButtonDown(0)) {
                 currentRail = null;
                 tether.SetActive(false);
@@ -267,27 +266,24 @@ public class PlayerScript : MonoBehaviour
             }
         }*/
 
-        if (tethered)
-        {
+        if (tethered) {
             tetherJoint.connectedAnchor = tether_points.Peek().anchorPoint;
             float lastSegmentLength = Vector2.Distance(tether_points.Peek().anchorPoint, position);
             float jointlength = maxTetherLength - (tetherLength - lastSegmentLength);
             tetherJoint.distance = jointlength;
         }
-        else
-        {
+        else {
             tetherJoint.distance = 1000.0f;
         }
 
-        if(myRb.velocity.magnitude > maxSpeed) {
+        if (myRb.velocity.magnitude > maxSpeed) {
             myRb.velocity = myRb.velocity.normalized * maxSpeed;
         }
 
         float thrust = tethered || inside ? attachedThrust : detachedThrust;
-        Vector3 accelerationVector = new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0);   
+        Vector3 accelerationVector = new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0);
         Vector3 accelComponentInDir = myRb.velocity * (Vector3.Dot(accelerationVector, myRb.velocity) / Mathf.Pow(myRb.velocity.magnitude, 2));
-        if (myRb.velocity.magnitude > 0)
-        {
+        if (myRb.velocity.magnitude > 0) {
             accelComponentInDir *= 1 - accelerationCurve.Evaluate(Mathf.Clamp01(myRb.velocity.magnitude / maxSpeed));
             float dotprod = Mathf.Clamp01(Vector3.Dot(accelerationVector, myRb.velocity));
             accelerationVector = Vector3.Lerp(accelerationVector, accelerationVector - accelComponentInDir, dotprod);
@@ -319,7 +315,8 @@ public class PlayerScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Damage") {
             currentDamage = other.gameObject;
-        }    }
+        }
+    }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         AudioHelper.PlayInside(hitWall[Random.Range(0, hitWall.Length)], 0.01f, 0.05f, 0.2f);
@@ -423,13 +420,17 @@ public class PlayerScript : MonoBehaviour
 
         if (health <= 0) {
             sounds = Inside ? deathSounds : deathSoundsDim;
+            GetComponent<SpriteRenderer>().sprite = deadDoggo;
             AudioSource.PlayClipAtPoint(sounds[Random.Range(0, sounds.Length)], transform.position);
             manager.GameOver();
         }
     }
 
-    private void createNewAnchor(RaycastHit hit, TetherAnchor prevPoint, float prevangle)
-    {
+    public void GoodBoy() {
+        GetComponent<SpriteRenderer>().sprite = happyDoggo;
+    }
+
+    private void createNewAnchor(RaycastHit hit, TetherAnchor prevPoint, float prevangle) {
         Vector3 hitLocalSpace = hit.transform.InverseTransformPoint(hit.point);
         Vector2 offset = new Vector2(Mathf.Sign(hitLocalSpace.x), Mathf.Sign(hitLocalSpace.y));
 
@@ -441,13 +442,11 @@ public class PlayerScript : MonoBehaviour
         newTetherPosition = hit.transform.TransformPoint(newTetherPosition);
         tether_points.Push(new TetherAnchor(toVec3(newTetherPosition), prevPoint, prevangle));
     }
-    public Vector3 toVec3(Vector2 vin)
-    {
+    public Vector3 toVec3(Vector2 vin) {
         return new Vector3(vin.x, vin.y, 0);
     }
 
-    public Vector2 toVec2(Vector3 vin)
-    {
+    public Vector2 toVec2(Vector3 vin) {
         return new Vector2(vin.x, vin.y);
     }
 }

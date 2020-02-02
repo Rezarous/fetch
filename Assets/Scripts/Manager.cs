@@ -58,6 +58,7 @@ public class Manager : MonoBehaviour {
     void Victory() {
         victory.SetActive(true);
         gameActive = false;
+        player.GoodBoy();
     }
 
     public void GameOver() {
