@@ -6,7 +6,7 @@ public class DamageController : MonoBehaviour
 {
     public int damage;
     Color color;
-    float r,g,b;
+    float r, g, b;
     float a;
     Quaternion initialRot;
     Ship ship;
@@ -14,38 +14,41 @@ public class DamageController : MonoBehaviour
     void OnEnable() {
         ship = GameObject.FindGameObjectWithTag("Spaceship").GetComponent<Ship>();
         initialRot = transform.localRotation;
-        if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
+        if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
             ship.Damage();
             damage = 100;
-        } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
+        }
+        else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
             damage = 0;
-        } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
+        }
+        else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
             damage = 0;
         }
     }
-    
+
     // Called from the player
     public void ReduceDamage() {
         damage--;
-        if(damage > 0) {
-            if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
-                FadeFireAway();
-            } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
-                FixDetachable();
-            } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
-                FixDetachable();
-            }
-        }else if(damage <= 0) {
-            ship.Repair();
-            if(gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Fire) {
-                Destroy(gameObject);
-            } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Detachable) {
-                GetComponent<DetachableObjectBehaviour>().MakeHealty();
-                transform.localRotation = initialRot;
-            } else if (gameObject.GetComponent<TypeManager>().type == TypeManager.Type.Damageable) {
-                GetComponent<DetachableObjectBehaviour>().MakeHealty();
-                transform.localRotation = initialRot;
-            }
+
+        switch (gameObject.GetComponent<TypeManager>().type) {
+            case TypeManager.Type.Fire:
+                if (damage > 0) {
+                    FadeFireAway();
+                }
+                else {
+                    Destroy(gameObject);
+                }
+                break;
+            case TypeManager.Type.Detachable:
+            case TypeManager.Type.Damageable:
+                if (damage > 0) {
+                    FixDetachable();
+                }
+                else {
+                    GetComponent<DetachableObjectBehaviour>().MakeHealty();
+                    transform.localRotation = initialRot;
+                }
+                break;
         }
     }
 
@@ -63,7 +66,7 @@ public class DamageController : MonoBehaviour
         r = color.r;
         g = color.g;
         b = color.b;
-        a = damage/200.0f;
+        a = damage / 200.0f;
         color = new Color(r, g, b, a);
         GetComponent<SpriteRenderer>().color = color;
     }

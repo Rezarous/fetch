@@ -12,6 +12,7 @@ TagManager:
   - AudioPlayer
   - AudioPlayerInside
   - AudioPlayerOutside
+  - ContinuousAudio
   layers:
   - Default
   - TransparentFX

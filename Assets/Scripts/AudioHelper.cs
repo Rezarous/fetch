@@ -19,18 +19,18 @@ public class AudioHelper : MonoBehaviour
 
     private static Dictionary<AudioSource, float> startVolumes;
 
-    public static void PlayOutside(AudioClip audioClip, float pitchJitter = 0f, float minVolume = 0f) {
-        Play(AudioOutside, audioClip, pitchJitter, minVolume);
+    public static void PlayOutside(AudioClip audioClip, float pitchJitter = 0f, float minVolume = 0f, float maxVolume = 1f) {
+        Play(AudioOutside, audioClip, pitchJitter, minVolume, maxVolume);
     }
-    public static void PlayInside(AudioClip audioClip, float pitchJitter = 0f, float minVolume = 0f) {
-        Play(AudioInside, audioClip, pitchJitter, minVolume);
+    public static void PlayInside(AudioClip audioClip, float pitchJitter = 0f, float minVolume = 0f, float maxVolume = 1f) {
+        Play(AudioInside, audioClip, pitchJitter, minVolume, maxVolume);
     }
-    private static void Play(AudioSource source, AudioClip audioClip, float pitchJitter = 0f, float minVolume = 1f) {
+    private static void Play(AudioSource source, AudioClip audioClip, float pitchJitter = 0f, float minVolume = 1f, float maxVolume = 1f) {
         float oldPitch = source.pitch;
         if (pitchJitter > 0f)
             source.pitch = Random.Range(-pitchJitter, pitchJitter);
 
-        source.PlayOneShot(audioClip, minVolume < 1f && minVolume >= 0f ? Random.Range(minVolume, 1f) : 1f);
+        source.PlayOneShot(audioClip, minVolume < 1f && minVolume >= 0f ? Random.Range(minVolume, maxVolume) : maxVolume);
         source.pitch = oldPitch;
     }
 

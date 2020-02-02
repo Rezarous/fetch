@@ -142,8 +142,8 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        AudioHelper.PlayInside(hitWall[Random.Range(0, hitWall.Length)], 0.01f, 0.5f);
-        AudioHelper.PlayOutside(hitWallDim[Random.Range(0, hitWallDim.Length)], 0.01f, 0.5f);
+        AudioHelper.PlayInside(hitWall[Random.Range(0, hitWall.Length)], 0.01f, 0.05f, 0.2f);
+        AudioHelper.PlayOutside(hitWallDim[Random.Range(0, hitWallDim.Length)], 0.01f, 0.05f, 0.2f);
     }
 
     void OnTriggerStay2D(Collider2D obj) {
