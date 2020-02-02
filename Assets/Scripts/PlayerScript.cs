@@ -193,7 +193,7 @@ public class PlayerScript : MonoBehaviour
     void FixedUpdate() {
         Camera.main.transform.position = transform.position + new Vector3(0, 0, -10);
 
-        /*if (!tether.activeSelf) {
+        if (!tether.activeSelf) {
             tether.transform.position = transform.position;
             if (Input.GetMouseButtonDown(0)) {
                 ThrowTether();
@@ -203,32 +203,27 @@ public class PlayerScript : MonoBehaviour
                 currentRail = null;
                 tether.SetActive(false);
             }
-        }*/
+        }
 
-        /*if (currentRail == null) {
+        if (currentRail == null) {
             Vector3 tetherDiff = tether.transform.position - transform.position;
             if (tetherDiff.magnitude > maxTetherLength) {
                 tetherRb.AddForce(-tetherDiff.normalized * springForce, ForceMode2D.Impulse);
                 myRb.AddForce(tetherDiff.normalized * springForce, ForceMode2D.Impulse);
             }
-        } else if (tetherLength > maxTetherLength) {
-            Vector3 effectiveTether = toVec3(tether_points.Peek().anchorPoint - position);
-            myRb.AddForce(effectiveTether.normalized * springForce, ForceMode2D.Impulse);
-        }*/
+        }
 
-        // bool tethered = tether.GetComponent<Tether>().tethered;
+        bool tethered = tether.GetComponent<Tether>().tethered;
 
         tetherJoint.connectedAnchor = tether_points.Peek().anchorPoint;
         float lastSegmentLength = Vector2.Distance(tether_points.Peek().anchorPoint, position);
         float jointlength = maxTetherLength - (tetherLength - lastSegmentLength);
         tetherJoint.distance = jointlength;
 
-        if(myRb.velocity.magnitude > maxSpeed)
-        {
+        if(myRb.velocity.magnitude > maxSpeed) {
             myRb.velocity = myRb.velocity.normalized * maxSpeed;
         }
 
-        bool tethered = true;
         float thrust = tethered || inside ? attachedThrust : detachedThrust;
         Vector3 accelerationVector = new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0);   
         Vector3 accelComponentInDir = myRb.velocity * (Vector3.Dot(accelerationVector, myRb.velocity) / Mathf.Pow(myRb.velocity.magnitude, 2));
@@ -244,14 +239,14 @@ public class PlayerScript : MonoBehaviour
     }
 
     void ThrowTether() {
-        /*Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 mouseDiff = mousePos - transform.position;
         mouseDiff.z = 0;
 
         tether.SetActive(true);
         tetherRb.velocity = myRb.velocity;
         tetherRb.AddForce(mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
-        myRb.AddForce(-mouseDiff.normalized * throwForce, ForceMode2D.Impulse);*/
+        myRb.AddForce(-mouseDiff.normalized * throwForce, ForceMode2D.Impulse);
     }
 
     public void SetRail(GameObject rail) {

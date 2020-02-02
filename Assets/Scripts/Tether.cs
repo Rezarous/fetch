@@ -22,6 +22,7 @@ public class Tether : MonoBehaviour
         tethered = true;
         player.SetRail(col.gameObject);
         AudioSource.PlayClipAtPoint(connectSound, transform.position);
+        gameObject.SetActive(false);
     }
 
     public void DetachTether() {
