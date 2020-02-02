@@ -38,6 +38,7 @@ public class PlayerScript : MonoBehaviour
     public DistanceJoint2D tetherJoint;
 
     public bool inside = true;
+    public bool tethered = true;
     public bool Inside {
         get { return inside; }
         set {
@@ -127,57 +128,59 @@ public class PlayerScript : MonoBehaviour
         }
 
         ///////////////////////////////////////////////////////
-        
-        
-        if(tether_points.Count < 2 && currentRail)
+
+        if (tethered)
         {
-            Vector2 closestPoint = Vector2.zero;
-            float distToRail = currentRail.getDistToRail(toVec2(transform.position), out closestPoint);
-            tether_points.Peek().anchorPoint = closestPoint;
-            tetherLength = distToRail;
-        }
 
-        ///////////////////////////////////////////////////////
-
-        RaycastHit playerTrace;
-        if (tether_points.Count > 1)
-        {
-            Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
-            Vector3 prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
-            
-            bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 11);
-            Vector2 flippedPrevDir = new Vector2(-prevdir.y, prevdir.x);
-            float angle = Mathf.Sign(Vector2.Dot(toVec2(dir).normalized, flippedPrevDir.normalized));
-
-            if (hitBox) 
+            if (tether_points.Count < 2 && currentRail)
             {
-                createNewAnchor(playerTrace, tether_points.Peek(), angle);
-                dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
-                prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
-                flippedPrevDir = new Vector2(-prevdir.y, prevdir.x);
-                angle = Mathf.Sign(Vector2.Dot(toVec2(dir).normalized, flippedPrevDir.normalized));
-                tether_points.Peek().prevangle = angle;
+                Vector2 closestPoint = Vector2.zero;
+                float distToRail = currentRail.getDistToRail(toVec2(transform.position), out closestPoint);
+                tether_points.Peek().anchorPoint = closestPoint;
+                tetherLength = distToRail;
             }
 
-            Debug.DrawLine(tether_points.Peek().anchorPoint, position, hitBox ? Color.red : Color.white);
-
-            if (angle != tether_points.Peek().prevangle) tether_points.Pop();
-            
-        }
-        else
-        {
-            Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
-            bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 11);
-            if (hitBox)
+            RaycastHit playerTrace;
+            if (tether_points.Count > 1)
             {
-                createNewAnchor(playerTrace, tether_points.Peek(), 1);
-                dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
+                Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
                 Vector3 prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
+
+                bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 11);
                 Vector2 flippedPrevDir = new Vector2(-prevdir.y, prevdir.x);
                 float angle = Mathf.Sign(Vector2.Dot(toVec2(dir).normalized, flippedPrevDir.normalized));
-                tether_points.Peek().prevangle = angle;
+
+                if (hitBox)
+                {
+                    createNewAnchor(playerTrace, tether_points.Peek(), angle);
+                    dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
+                    prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
+                    flippedPrevDir = new Vector2(-prevdir.y, prevdir.x);
+                    angle = Mathf.Sign(Vector2.Dot(toVec2(dir).normalized, flippedPrevDir.normalized));
+                    tether_points.Peek().prevangle = angle;
+                }
+
+                Debug.DrawLine(tether_points.Peek().anchorPoint, position, hitBox ? Color.red : Color.white);
+
+                if (angle != tether_points.Peek().prevangle) tether_points.Pop();
+
             }
-            Debug.DrawLine(tether_points.Peek().anchorPoint, position, tetherLength > maxTetherLength ? Color.red : Color.white);
+            else
+            {
+                Vector3 dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
+                bool hitBox = Physics.Raycast(toVec3(position), dir.normalized, out playerTrace, dir.magnitude, 1 << 11);
+                if (hitBox)
+                {
+                    createNewAnchor(playerTrace, tether_points.Peek(), 1);
+                    dir = (toVec3(tether_points.Peek().anchorPoint) - toVec3(position));
+                    Vector3 prevdir = toVec3(tether_points.Peek().previousPoint.anchorPoint) - toVec3(tether_points.Peek().anchorPoint);
+                    Vector2 flippedPrevDir = new Vector2(-prevdir.y, prevdir.x);
+                    float angle = Mathf.Sign(Vector2.Dot(toVec2(dir).normalized, flippedPrevDir.normalized));
+                    tether_points.Peek().prevangle = angle;
+                }
+                Debug.DrawLine(tether_points.Peek().anchorPoint, position, tetherLength > maxTetherLength ? Color.red : Color.white);
+            }
+
         }
 
         lineRendererPoints = new Vector3[tether_points.Count + 1];
@@ -193,11 +196,18 @@ public class PlayerScript : MonoBehaviour
             lineRendererPoints[num+1] = new Vector3(t.anchorPoint.x, t.anchorPoint.y, -0.01f);
             num++;
         }
+
         tempTetherLength += Vector2.Distance(tether_points.Peek().anchorPoint, position);
         tetherLength = tempTetherLength;
         lineRendererPoints[0] = position;
         tetherLine.SetVertexCount(lineRendererPoints.Length);
         tetherLine.SetPositions(lineRendererPoints);
+    }
+
+    public void resetTether()
+    {
+        tether_points = new Stack<TetherAnchor>();
+        tether_points.Push(new TetherAnchor(position, null, 0));
     }
 
     void FixedUpdate() {
@@ -228,17 +238,23 @@ public class PlayerScript : MonoBehaviour
 
         // bool tethered = tether.GetComponent<Tether>().tethered;
 
-        tetherJoint.connectedAnchor = tether_points.Peek().anchorPoint;
-        float lastSegmentLength = Vector2.Distance(tether_points.Peek().anchorPoint, position);
-        float jointlength = maxTetherLength - (tetherLength - lastSegmentLength);
-        tetherJoint.distance = jointlength;
+        if (tethered)
+        {
+            tetherJoint.connectedAnchor = tether_points.Peek().anchorPoint;
+            float lastSegmentLength = Vector2.Distance(tether_points.Peek().anchorPoint, position);
+            float jointlength = maxTetherLength - (tetherLength - lastSegmentLength);
+            tetherJoint.distance = jointlength;
+        }
+        else
+        {
+            tetherJoint.distance = Mathf.Infinity;
+        }
 
         if(myRb.velocity.magnitude > maxSpeed)
         {
             myRb.velocity = myRb.velocity.normalized * maxSpeed;
         }
 
-        bool tethered = true;
         float thrust = tethered || inside ? attachedThrust : detachedThrust;
         Vector3 accelerationVector = new Vector3(Input.GetAxis("Horizontal") * thrust, Input.GetAxis("Vertical") * thrust, 0);   
         Vector3 accelComponentInDir = myRb.velocity * (Vector3.Dot(accelerationVector, myRb.velocity) / Mathf.Pow(myRb.velocity.magnitude, 2));
